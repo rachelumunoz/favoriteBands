@@ -1,10 +1,14 @@
 package io.rachelmunoz.favoritebands;
 
+import java.util.UUID;
+
 /**
  * Created by rachelmunoz on 10/12/17.
  */
 
 public class Artist {
+	private UUID mUuid;
+	private String mMediaId;
 	private String mName;
 	private String mUrl;
 	private String mTrackerCount;
@@ -12,8 +16,21 @@ public class Artist {
 	private boolean mFavorited;
 
 	public Artist(){
+		mUuid = UUID.randomUUID();
 		mName = "Test Artist";
 		mUrl = "https://vignette.wikia.nocookie.net/acourtofthornsandroses/images/a/a5/Cute_kitty.jpg/revision/latest/scale-to-width-down/540?cb=20170220162435";
+	}
+
+	public UUID getUuid() {
+		return mUuid;
+	}
+
+	public String getMediaId() {
+		return mMediaId;
+	}
+
+	public void setMediaId(String mediaId) {
+		mMediaId = mediaId;
 	}
 
 	public String getName() {
