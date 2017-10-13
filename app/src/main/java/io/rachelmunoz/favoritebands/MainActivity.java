@@ -22,7 +22,6 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 	private static final String TAG = "MainActivity";
-	private SectionsPageAdapter mSectionsPageAdapter;
 
 	private ViewPager mViewPager;
 
@@ -36,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
 		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		getSupportActionBar().setDisplayShowTitleEnabled(false);
-		toolbar.setTitle("");
 
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 		tabLayout.setupWithViewPager(mViewPager);
