@@ -9,6 +9,7 @@ public class Artist {
 	private String mUrl;
 	private String mTrackerCount;
 	private String mEventCount;
+	private boolean mFavorited;
 
 	public Artist(){
 		mName = "Test Artist";
@@ -45,5 +46,13 @@ public class Artist {
 
 	public void setEventCount(String eventCount) {
 		mEventCount = eventCount;
+	}
+
+	public boolean isFavorited(){
+		return mFavorited;
+	}
+
+	public void setFavorited(boolean favorited) {
+		mFavorited = favorited;
 	}
 }
