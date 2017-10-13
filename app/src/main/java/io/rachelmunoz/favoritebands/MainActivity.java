@@ -31,8 +31,6 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		Log.d(TAG, "Starting");
-
 		mViewPager = (ViewPager) findViewById(R.id.container);
 		setupViewPager(mViewPager);
 
@@ -49,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
 	private void setupViewPager(ViewPager viewPager){
 		SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
-		adapter.addFragment(new SearchFragment(), "SearchFragment");
-		adapter.addFragment(new FavoriteFragment(), "FavoriteFragment");
+		adapter.addFragment(new SearchFragment(), getString(R.string.search_tab));
+		adapter.addFragment(new FavoriteFragment(), getString(R.string.favorite_tab));
 
 		viewPager.setAdapter(adapter);
 	}
