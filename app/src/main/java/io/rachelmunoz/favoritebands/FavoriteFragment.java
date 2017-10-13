@@ -87,11 +87,8 @@ public class FavoriteFragment extends Fragment {
 	}
 
 	public void updateUI(){
-		List<Artist> artists = new ArrayList<>();
-		artists.add(new Artist());
-		artists.add(new Artist());
-		artists.add(new Artist());
-		artists.add(new Artist());
+		ArtistLab artistLab = ArtistLab.get(getActivity());
+		List<Artist> artists = artistLab.getArtists();
 
 		if (mAdapter == null){
 			mAdapter = new ArtistAdapter(artists);
