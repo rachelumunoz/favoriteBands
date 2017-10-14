@@ -1,5 +1,8 @@
 package io.rachelmunoz.favoritebands;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.UUID;
 
 /**
@@ -8,18 +11,39 @@ import java.util.UUID;
 
 public class Artist {
 	private UUID mUuid;
-	private String mMediaId;
+
+	@SerializedName("name")
+	@Expose
 	private String mName;
-	private String mUrl;
-	private String mTrackerCount;
-	private String mEventCount;
+
+	@SerializedName("media_id")
+	@Expose
+	private String mMediaId;
+
+	@SerializedName("image_url")
+	@Expose
+	private String mImageUrl;
+
+	@SerializedName("tracker_count")
+	@Expose
+	private int mTrackerCount;
+
+	@SerializedName("upcoming_event_count")
+	@Expose
+	private int mEventCount;
+
 	private boolean mFavorited;
 
-	public Artist(){
-		mUuid = UUID.randomUUID();
-		mName = "Test Artist";
-		mUrl = "https://vignette.wikia.nocookie.net/acourtofthornsandroses/images/a/a5/Cute_kitty.jpg/revision/latest/scale-to-width-down/540?cb=20170220162435";
-	}
+//	public Artist(){
+//		mUuid = UUID.randomUUID();
+//		mName = "Test Artist";
+//		mImageUrl = "https://vignette.wikia.nocookie.net/acourtofthornsandroses/images/a/a5/Cute_kitty.jpg/revision/latest/scale-to-width-down/540?cb=20170220162435";
+//	}
+
+//	public Artist(String mediaId, String name){
+//		mMediaId = mediaId;
+//		mName = name;
+//	}
 
 	public UUID getUuid() {
 		return mUuid;
@@ -41,27 +65,27 @@ public class Artist {
 		mName = name;
 	}
 
-	public String getUrl() {
-		return mUrl;
+	public String getImageUrl() {
+		return mImageUrl;
 	}
 
-	public void setUrl(String url) {
-		mUrl = url;
+	public void setImageUrl(String imageUrl) {
+		mImageUrl = imageUrl;
 	}
 
-	public String getTrackerCount() {
+	public int getTrackerCount() {
 		return mTrackerCount;
 	}
 
-	public void setTrackerCount(String trackerCount) {
+	public void setTrackerCount(int trackerCount) {
 		mTrackerCount = trackerCount;
 	}
 
-	public String getEventCount() {
+	public int getEventCount() {
 		return mEventCount;
 	}
 
-	public void setEventCount(String eventCount) {
+	public void setEventCount(int eventCount) {
 		mEventCount = eventCount;
 	}
 
