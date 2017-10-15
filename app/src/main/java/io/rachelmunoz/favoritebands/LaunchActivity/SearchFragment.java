@@ -58,7 +58,7 @@ public class SearchFragment extends Fragment {
 		View v = inflater.inflate(R.layout.fragment_search, container, false);
 
 		final SearchView searchView = (SearchView) v.findViewById(R.id.search_view); // search View
-		mRecyclerView = v.findViewById(R.id.recycler_view);
+		mRecyclerView = v.findViewById(R.id.artist_recycler_view);
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 		updateUI();
 
@@ -68,7 +68,8 @@ public class SearchFragment extends Fragment {
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-//				searchArtist(query);
+				refreshFragment();
+				Log.d(TAG, "query is " + query);
 				mApiSearchInterface.getArtists(query)
 						.flatMap(new Func1<RequestResponse, Observable<Artist>>() {
 							@Override
@@ -102,116 +103,40 @@ public class SearchFragment extends Fragment {
 							}
 						});
 
-				updateUI();
+				updateUI(); // necessary?
 				return true;
 			}
 
 			@Override
 			public boolean onQueryTextChange(String newText) {
-				Log.d(TAG, "QueryTextChange " + newText);
 				return false;
 			}
 		});
-
-
-
-
 		return v;
 	}
 
-
 	private void updateUI(){
 		if (mRecyclerAdapter == null){
-			mRecyclerAdapter = new RecyclerAdapter(mArtists);
-			mRecyclerView.setAdapter(mRecyclerAdapter);
+			setupAdapter();
 		} else {
 			mRecyclerAdapter.setArtists(mArtists);
 			mRecyclerAdapter.notifyDataSetChanged();
 		}
 	}
 
-
-	private void searchArtist(String query){
-		mApiSearchInterface.getArtists(query)
-				.subscribeOn(Schedulers.newThread())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(new Subscriber<RequestResponse>() {
-					@Override
-					public void onCompleted() {
-
-					}
-
-					@Override
-					public void onError(Throwable e) {
-						Log.e(TAG, e.getMessage());
-					}
-
-					@Override
-					public void onNext(RequestResponse requestResponse) {
-//						mArtists = requestResponse.getData();
-//						getArtistDetails(mArtists.get(0).getName());
-//						updateUI();
-					}
-				});
-
-
-//		Call<RequestResponse> call = mApiSearchInterface.getArtists(query);
-//		call.enqueue(new Callback<RequestResponse>() {
-//			@Override
-//			public void onResponse(Call<RequestResponse> call, Response<RequestResponse> response) {
-//				mArtists = response.body().getData();
-//				// update RecyclerView with data fetched
-//				updateUI();
-//			}
-//
-//			@Override
-//			public void onFailure(Call<RequestResponse> call, Throwable t) {
-//				Log.e(TAG, "failure", t);
-//			}
-//		});
-	}
-
-
-	private void getArtistDetails(String newText){
-		mApiArtistInterface.getArtistDetails(newText)
-				.subscribeOn(Schedulers.newThread())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(new Subscriber<Artist>() {
-					@Override
-					public void onCompleted() {
-
-					}
-
-					@Override
-					public void onError(Throwable e) {
-
-					}
-
-					@Override
-					public void onNext(Artist artist) {
-
-					}
-				});
-//		call.enqueue(new Callback<Artist>() {
-//			@Override
-//			public void onResponse(Call<Artist> call, Response<Artist> response) {
-//				Log.d(TAG, "Success!!");
-//				Artist artist = response.body();
-//				//update viewholder?
-//			}
-//
-//			@Override
-//			public void onFailure(Call<Artist> call, Throwable t) {
-//				Log.e(TAG, "Failure", t);
-//			}
-//		});
-	}
-
 	private void refreshFragment(){
-		FragmentManager fm = getFragmentManager();
-		Fragment newFragment = new ArtistFragment();
+		if (mRecyclerAdapter == null){
+			setupAdapter();
+		} else {
+			mArtists = new ArrayList<>(); // need to clear mArtists
+			mRecyclerAdapter.setArtists(mArtists);
+			mRecyclerAdapter.notifyDataSetChanged();
+		}
+	}
 
-		fm.beginTransaction().replace(R.id.recycler_view, newFragment).commit();
+	private void setupAdapter() {
+		mRecyclerAdapter = new RecyclerAdapter(mArtists);
+		mRecyclerView.setAdapter(mRecyclerAdapter);
 	}
 
 }
