@@ -3,6 +3,7 @@ package io.rachelmunoz.favoritebands;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -18,9 +19,11 @@ import io.rachelmunoz.favoritebands.REST.ApiInterface;
 import io.rachelmunoz.favoritebands.REST.ArtistClient;
 import io.rachelmunoz.favoritebands.REST.RequestResponse;
 import io.rachelmunoz.favoritebands.REST.SearchClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -35,6 +38,8 @@ public class SearchFragment extends Fragment {
 	private ApiInterface mApiSearchInterface;
 	private List<Artist> mArtists = new ArrayList<>();
 	private ApiInterface mApiArtistInterface;
+
+
 
 
 	@Override
@@ -59,7 +64,41 @@ public class SearchFragment extends Fragment {
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				searchArtist(query);
+//				searchArtist(query);
+				mApiSearchInterface.getArtists(query)
+						.flatMap(new Func1<RequestResponse, Observable<Artist>>() {
+							@Override
+							public Observable<Artist> call(RequestResponse requestResponse) {
+								return Observable.from(requestResponse.getData());
+							}
+						})
+						.flatMap(new Func1<Artist, Observable<Artist>>() {
+							@Override
+							public Observable<Artist> call(Artist artist) {
+								return mApiArtistInterface.getArtistDetails(artist.getName());
+							}
+						})
+						.subscribeOn(Schedulers.newThread())
+						.observeOn(AndroidSchedulers.mainThread())
+						.subscribe(new Subscriber<Artist>() {
+							@Override
+							public void onCompleted() {
+
+							}
+
+							@Override
+							public void onError(Throwable e) {
+
+							}
+
+							@Override
+							public void onNext(Artist artist) {
+								mArtists.add(artist);
+								updateUI();
+							}
+						});
+
+				updateUI();
 				return true;
 			}
 
@@ -87,41 +126,89 @@ public class SearchFragment extends Fragment {
 		}
 	}
 
-	private void searchArtist(String query){
-		Call<RequestResponse> call = mApiSearchInterface.getArtists(query);
-		call.enqueue(new Callback<RequestResponse>() {
-			@Override
-			public void onResponse(Call<RequestResponse> call, Response<RequestResponse> response) {
-				mArtists = response.body().getData();
-//				getArtistDetails(mArtists.get(0).getName());
-				updateUI();
-			}
 
-			@Override
-			public void onFailure(Call<RequestResponse> call, Throwable t) {
-				Log.e(TAG, "failure", t);
-			}
-		});
+	private void searchArtist(String query){
+		mApiSearchInterface.getArtists(query)
+				.subscribeOn(Schedulers.newThread())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(new Subscriber<RequestResponse>() {
+					@Override
+					public void onCompleted() {
+
+					}
+
+					@Override
+					public void onError(Throwable e) {
+						Log.e(TAG, e.getMessage());
+					}
+
+					@Override
+					public void onNext(RequestResponse requestResponse) {
+//						mArtists = requestResponse.getData();
+//						getArtistDetails(mArtists.get(0).getName());
+//						updateUI();
+					}
+				});
+
+
+//		Call<RequestResponse> call = mApiSearchInterface.getArtists(query);
+//		call.enqueue(new Callback<RequestResponse>() {
+//			@Override
+//			public void onResponse(Call<RequestResponse> call, Response<RequestResponse> response) {
+//				mArtists = response.body().getData();
+//				// update RecyclerView with data fetched
+//				updateUI();
+//			}
+//
+//			@Override
+//			public void onFailure(Call<RequestResponse> call, Throwable t) {
+//				Log.e(TAG, "failure", t);
+//			}
+//		});
 	}
 
 
 	private void getArtistDetails(String newText){
-		Call<Artist> call = mApiArtistInterface.getArtistDetails(newText);
-		call.enqueue(new Callback<Artist>() {
-			@Override
-			public void onResponse(Call<Artist> call, Response<Artist> response) {
-				Log.d(TAG, "Success!!");
-				Artist artist = response.body();
-				//update viewholder?
-			}
+		mApiArtistInterface.getArtistDetails(newText)
+				.subscribeOn(Schedulers.newThread())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(new Subscriber<Artist>() {
+					@Override
+					public void onCompleted() {
 
-			@Override
-			public void onFailure(Call<Artist> call, Throwable t) {
-				Log.e(TAG, "Failure", t);
-			}
-		});
+					}
+
+					@Override
+					public void onError(Throwable e) {
+
+					}
+
+					@Override
+					public void onNext(Artist artist) {
+
+					}
+				});
+//		call.enqueue(new Callback<Artist>() {
+//			@Override
+//			public void onResponse(Call<Artist> call, Response<Artist> response) {
+//				Log.d(TAG, "Success!!");
+//				Artist artist = response.body();
+//				//update viewholder?
+//			}
+//
+//			@Override
+//			public void onFailure(Call<Artist> call, Throwable t) {
+//				Log.e(TAG, "Failure", t);
+//			}
+//		});
 	}
 
+	private void refreshFragment(){
+		FragmentManager fm = getFragmentManager();
+		Fragment newFragment = new ArtistFragment();
+
+		fm.beginTransaction().replace(R.id.recycler_view, newFragment).commit();
+	}
 
 }
 

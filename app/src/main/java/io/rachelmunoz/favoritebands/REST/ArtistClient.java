@@ -1,6 +1,7 @@
 package io.rachelmunoz.favoritebands.REST;
 
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static io.rachelmunoz.favoritebands.REST.SearchClient.SEARCH_URL;
@@ -18,6 +19,7 @@ public class ArtistClient {
 	public static Retrofit getApiClient(){
 		if (sRetrofit == null){
 			sRetrofit = new Retrofit.Builder().baseUrl(BASE_URL)
+					.addCallAdapterFactory(RxJavaCallAdapterFactory.create())
 					.addConverterFactory(GsonConverterFactory.create()).build();
 		}
 
