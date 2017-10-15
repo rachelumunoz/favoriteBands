@@ -1,4 +1,4 @@
-package io.rachelmunoz.favoritebands;
+package io.rachelmunoz.favoritebands.LaunchActivity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,10 +15,14 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.rachelmunoz.favoritebands.Artist;
+import io.rachelmunoz.favoritebands.ArtistFragment;
+import io.rachelmunoz.favoritebands.R;
 import io.rachelmunoz.favoritebands.REST.ApiInterface;
 import io.rachelmunoz.favoritebands.REST.ArtistClient;
 import io.rachelmunoz.favoritebands.REST.RequestResponse;
 import io.rachelmunoz.favoritebands.REST.SearchClient;
+import io.rachelmunoz.favoritebands.RecyclerAdapter;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
