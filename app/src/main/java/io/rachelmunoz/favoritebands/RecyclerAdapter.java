@@ -54,6 +54,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 	}
 
 	public class ArtistHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+		public static final String EXTRA_ARTIST_NAME = "artist_name";
 		private ImageView mArtistImage;
 		private TextView mArtistName;
 		private ImageView mFavoriteIcon;
@@ -78,6 +79,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 		public void onClick(View view) {
 			Context context = view.getContext();
 			Intent intent = new Intent(context, ArtistActivity.class);
+			intent.putExtra(EXTRA_ARTIST_NAME, mArtist.getName());
 			context.startActivity(intent);
 		}
 	}
