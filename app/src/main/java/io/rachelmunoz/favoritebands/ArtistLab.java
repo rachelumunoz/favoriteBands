@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,6 @@ import java.util.UUID;
 
 import io.rachelmunoz.favoritebands.database.ArtistBaseHelper;
 import io.rachelmunoz.favoritebands.database.ArtistCursorWrapper;
-import io.rachelmunoz.favoritebands.database.ArtistDbSchema;
 import io.rachelmunoz.favoritebands.database.ArtistDbSchema.ArtistDbTable;
 
 /**
@@ -22,7 +20,6 @@ import io.rachelmunoz.favoritebands.database.ArtistDbSchema.ArtistDbTable;
 public class ArtistLab {
 	private static ArtistLab mArtistLab;
 
-//	private List<Artist> mArtists;
 	private Context mContext;
 	private SQLiteDatabase mDatabase;
 
@@ -36,7 +33,6 @@ public class ArtistLab {
 
 	private ArtistLab(Context context){
 		mContext = context.getApplicationContext();
-
 		mDatabase = new ArtistBaseHelper(mContext).getWritableDatabase();
 	}
 
@@ -90,13 +86,16 @@ public class ArtistLab {
 			cursor.close();
 		}
 	}
+//
+//	whereClause = ImageThoughtTable.Cols.COMPLETE + " = ?";
+//	whereArgs =  new String[]{String.valueOf(1)};
 
 	private ArtistCursorWrapper queryArtists(String whereClause, String[] whereArgs){
 		Cursor cursor = mDatabase.query(
 				ArtistDbTable.NAME,
 				null,
-				whereClause,
-				whereArgs,
+				ArtistDbTable.Cols.FAVORITED + " = ?",
+				new String[]{String.valueOf(1)},
 				null,
 				null,
 				null
@@ -112,9 +111,9 @@ public class ArtistLab {
 		values.put(ArtistDbTable.Cols.NAME, artist.getName());
 		values.put(ArtistDbTable.Cols.MEDIA_ID, artist.getMediaId());
 		values.put(ArtistDbTable.Cols.FAVORITED, artist.isFavorited() ? Integer.toString(1) : Integer.toString(0));
-		values.put(ArtistDbTable.Cols.IMAGE_URL, artist.getUrl());
-		values.put(ArtistDbTable.Cols.EVENT_COUNT, artist.getEventCount());
-		values.put(ArtistDbTable.Cols.TRACKER_COUNT, artist.getTrackerCount());
+		values.put(ArtistDbTable.Cols.IMAGE_URL, artist.getImageUrl());
+		values.put(ArtistDbTable.Cols.EVENT_COUNT, Integer.toString(artist.getEventCount()));
+		values.put(ArtistDbTable.Cols.TRACKER_COUNT, Integer.toString(artist.getTrackerCount()));
 
 		return values;
 	}
