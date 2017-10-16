@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -81,6 +82,8 @@ public class SearchFragment extends Fragment {
 		final SearchView searchView = (SearchView) v.findViewById(R.id.search_view); // search View
 		mRecyclerView = v.findViewById(R.id.artist_recycler_view);
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+		mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),
+				DividerItemDecoration.VERTICAL));
 		updateUI();
 
 		mApiSearchInterface = SearchClient.getApiClient().create(ApiInterface.class);

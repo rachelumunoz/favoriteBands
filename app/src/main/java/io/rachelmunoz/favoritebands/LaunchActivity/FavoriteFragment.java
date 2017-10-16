@@ -3,11 +3,13 @@ package io.rachelmunoz.favoritebands.LaunchActivity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -26,14 +28,19 @@ public class FavoriteFragment extends Fragment {
 	private RecyclerAdapter mAdapter;
 
 
+	public  static void refresh(){
+
+	}
+
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_favorites, container, false);
 
-		mRecyclerView = v.findViewById(R.id.recycler_view);
+		mRecyclerView = v.findViewById(R.id.artist_recycler_view);
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+		mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),
+				DividerItemDecoration.VERTICAL));
 		updateUI();
 		return v;
 	}
@@ -52,3 +59,4 @@ public class FavoriteFragment extends Fragment {
 		}
 	}
 }
+
