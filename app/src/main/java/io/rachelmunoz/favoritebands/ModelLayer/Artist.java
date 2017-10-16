@@ -1,4 +1,4 @@
-package io.rachelmunoz.favoritebands;
+package io.rachelmunoz.favoritebands.ModelLayer;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -44,6 +44,15 @@ public class Artist {
 //		mMediaId = mediaId;
 //		mName = name;
 //	}
+
+
+	public void setUuid(UUID uuid) {
+		mUuid = uuid;
+	}
+
+	public void addUUID(){
+		mUuid = UUID.randomUUID();
+	}
 
 	public UUID getUuid() {
 		return mUuid;

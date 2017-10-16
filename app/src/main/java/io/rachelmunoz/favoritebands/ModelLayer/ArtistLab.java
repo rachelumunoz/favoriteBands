@@ -1,4 +1,4 @@
-package io.rachelmunoz.favoritebands;
+package io.rachelmunoz.favoritebands.ModelLayer;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import io.rachelmunoz.favoritebands.database.ArtistBaseHelper;
-import io.rachelmunoz.favoritebands.database.ArtistCursorWrapper;
-import io.rachelmunoz.favoritebands.database.ArtistDbSchema.ArtistDbTable;
+import io.rachelmunoz.favoritebands.Database.ArtistBaseHelper;
+import io.rachelmunoz.favoritebands.Database.ArtistCursorWrapper;
+import io.rachelmunoz.favoritebands.Database.ArtistDbSchema.ArtistDbTable;
 
 /**
  * Created by rachelmunoz on 10/13/17.

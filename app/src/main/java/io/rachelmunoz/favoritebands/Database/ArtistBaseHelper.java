@@ -1,10 +1,10 @@
-package io.rachelmunoz.favoritebands.database;
+package io.rachelmunoz.favoritebands.Database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import static io.rachelmunoz.favoritebands.database.ArtistDbSchema.*;
+import static io.rachelmunoz.favoritebands.Database.ArtistDbSchema.*;
 
 /**
  * Created by rachelmunoz on 10/13/17.

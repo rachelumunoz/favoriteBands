@@ -1,4 +1,4 @@
-package io.rachelmunoz.favoritebands.database;
+package io.rachelmunoz.favoritebands.Database;
 
 /**
  * Created by rachelmunoz on 10/13/17.

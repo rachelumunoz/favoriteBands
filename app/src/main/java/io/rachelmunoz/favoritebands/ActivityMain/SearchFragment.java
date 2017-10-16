@@ -1,13 +1,8 @@
-package io.rachelmunoz.favoritebands.LaunchActivity;
+package io.rachelmunoz.favoritebands.ActivityMain;
 
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,19 +11,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.rachelmunoz.favoritebands.Artist;
-import io.rachelmunoz.favoritebands.ArtistFragment;
+import io.rachelmunoz.favoritebands.ModelLayer.Artist;
 import io.rachelmunoz.favoritebands.R;
-import io.rachelmunoz.favoritebands.REST.ApiInterface;
-import io.rachelmunoz.favoritebands.REST.ArtistClient;
-import io.rachelmunoz.favoritebands.REST.RequestResponse;
-import io.rachelmunoz.favoritebands.REST.SearchClient;
-import io.rachelmunoz.favoritebands.RecyclerAdapter;
+import io.rachelmunoz.favoritebands.Api.ApiInterface;
+import io.rachelmunoz.favoritebands.Api.ArtistClient;
+import io.rachelmunoz.favoritebands.Api.RequestResponse;
+import io.rachelmunoz.favoritebands.Api.SearchClient;
+import io.rachelmunoz.favoritebands.FragmentArtist.RecyclerAdapter;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -48,6 +41,8 @@ public class SearchFragment extends Fragment {
 
 	private ApiInterface mApiSearchInterface;
 	private List<Artist> mArtists = new ArrayList<>();
+	List<Artist> received = new ArrayList<>();
+
 	private ApiInterface mApiArtistInterface;
 	private String mCurrentQuery;
 
@@ -95,7 +90,6 @@ public class SearchFragment extends Fragment {
 				mCurrentQuery = query;
 				refreshFragment();
 				searchArtist(query);
-				updateUI();
 				return true;
 			}
 
@@ -108,6 +102,7 @@ public class SearchFragment extends Fragment {
 	}
 
 	private void searchArtist(String query) {
+
 		mApiSearchInterface.getArtists(query)
 				.flatMap(new Func1<RequestResponse, Observable<Artist>>() {
 					@Override
@@ -137,7 +132,10 @@ public class SearchFragment extends Fragment {
 					@Override
 					public void onNext(Artist artist) {
 						mArtists.add(artist);
+//						received.add(artist);
+//						mRecyclerAdapter.swapItems(mArtists);
 						updateUI();
+						Log.d(TAG, "artist name is onnext "+ artist.getName());
 					}
 				});
 	}
@@ -155,7 +153,8 @@ public class SearchFragment extends Fragment {
 		if (mRecyclerAdapter == null){
 			setupAdapter();
 		} else {
-			mArtists = new ArrayList<>(); // need to clear mArtists
+//			mArtists = new ArrayList<>(); // need to clear mArtists
+			mArtists.clear();
 			mRecyclerAdapter.setArtists(mArtists);
 			mRecyclerAdapter.notifyDataSetChanged();
 		}

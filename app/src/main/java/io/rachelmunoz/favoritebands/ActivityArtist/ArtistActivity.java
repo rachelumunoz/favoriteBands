@@ -1,21 +1,18 @@
-package io.rachelmunoz.favoritebands.ArtistDetail;
+package io.rachelmunoz.favoritebands.ActivityArtist;
 
-import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
-import io.rachelmunoz.favoritebands.Artist;
+import io.rachelmunoz.favoritebands.ModelLayer.Artist;
 import io.rachelmunoz.favoritebands.R;
-import io.rachelmunoz.favoritebands.REST.ApiInterface;
-import io.rachelmunoz.favoritebands.REST.ArtistClient;
-import io.rachelmunoz.favoritebands.RecyclerAdapter;
+import io.rachelmunoz.favoritebands.Api.ApiInterface;
+import io.rachelmunoz.favoritebands.Api.ArtistClient;
+import io.rachelmunoz.favoritebands.FragmentArtist.RecyclerAdapter;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;

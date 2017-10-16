@@ -1,10 +1,8 @@
-package io.rachelmunoz.favoritebands.REST;
+package io.rachelmunoz.favoritebands.Api;
 
 
 
-import io.rachelmunoz.favoritebands.Artist;
-import io.rachelmunoz.favoritebands.REST.RequestResponse;
-import retrofit2.Call;
+import io.rachelmunoz.favoritebands.ModelLayer.Artist;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -22,4 +20,7 @@ public interface ApiInterface {
 
 	@GET("/artists/{artist}?app_id=hello")
 	Observable<Artist> getArtistDetails(@Path("artist") String artist);
+
+//	@GET("/thumb/{mediaId}.jpeg")
+//	Observable<PhotoResponse> getImage(@Path("mediaId") String mediaId);
 }

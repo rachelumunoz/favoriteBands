@@ -1,4 +1,4 @@
-package io.rachelmunoz.favoritebands.REST;
+package io.rachelmunoz.favoritebands.Api;
 
 /**
  * Created by rachelmunoz on 10/13/17.
@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import io.rachelmunoz.favoritebands.Artist;
+import io.rachelmunoz.favoritebands.ModelLayer.Artist;
 
 
 public class RequestResponse {

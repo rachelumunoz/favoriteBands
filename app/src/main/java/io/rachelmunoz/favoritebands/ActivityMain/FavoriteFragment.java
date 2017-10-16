@@ -1,4 +1,4 @@
-package io.rachelmunoz.favoritebands.LaunchActivity;
+package io.rachelmunoz.favoritebands.ActivityMain;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,14 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.List;
 
-import io.rachelmunoz.favoritebands.Artist;
-import io.rachelmunoz.favoritebands.ArtistLab;
+import io.rachelmunoz.favoritebands.ModelLayer.Artist;
+import io.rachelmunoz.favoritebands.ModelLayer.ArtistLab;
 import io.rachelmunoz.favoritebands.R;
-import io.rachelmunoz.favoritebands.RecyclerAdapter;
+import io.rachelmunoz.favoritebands.FragmentArtist.RecyclerAdapter;
 
 /**
  * Created by rachelmunoz on 10/12/17.

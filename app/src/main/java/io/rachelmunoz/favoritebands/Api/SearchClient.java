@@ -1,4 +1,4 @@
-package io.rachelmunoz.favoritebands.REST;
+package io.rachelmunoz.favoritebands.Api;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;

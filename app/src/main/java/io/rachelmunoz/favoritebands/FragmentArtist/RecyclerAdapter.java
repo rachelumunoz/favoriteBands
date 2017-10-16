@@ -1,13 +1,9 @@
-package io.rachelmunoz.favoritebands;
+package io.rachelmunoz.favoritebands.FragmentArtist;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.support.v4.content.ContextCompat;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,13 +17,12 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
-import io.rachelmunoz.favoritebands.ArtistDetail.ArtistActivity;
-import io.rachelmunoz.favoritebands.REST.ApiInterface;
-import io.rachelmunoz.favoritebands.REST.ArtistClient;
+import io.rachelmunoz.favoritebands.ModelLayer.Artist;
+import io.rachelmunoz.favoritebands.ActivityArtist.ArtistActivity;
+import io.rachelmunoz.favoritebands.ModelLayer.ArtistLab;
+import io.rachelmunoz.favoritebands.R;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
-import static io.rachelmunoz.favoritebands.RecyclerAdapter.ArtistHolder.EXTRA_ARTIST_NAME;
+import static io.rachelmunoz.favoritebands.FragmentArtist.RecyclerAdapter.ArtistHolder.EXTRA_ARTIST_NAME;
 
 
 /**
@@ -152,10 +147,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 
 		public void bind(Artist artist, View v) {
 			mArtist = artist;
-			mArtistName.setText(mArtist.getName());
+			mArtistName.setText(mArtist.getName() + artist.getEventCount());
 			Glide.with(v)
 				.load(artist.getImageUrl())
-				.apply(RequestOptions.circleCropTransform())
+				.apply(RequestOptions
+						.circleCropTransform()
+						.placeholder(new ColorDrawable(v.getResources().getColor(R.color.colorGrey)))
+						)
 				.into(mArtistImage);
 		}
 
@@ -166,6 +164,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 //			intent.putExtra(EXTRA_ARTIST_NAME, mArtist.getName());
 //			context.startActivity(intent);
 //		}
+	}
+
+	public void swapItems(List<Artist> artists) {
+		// compute diffs
+		final ArtistDiffCallback diffCallback = new ArtistDiffCallback(mArtists, artists);
+		final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+
+		// clear contacts and add
+		mArtists.clear();
+		mArtists.addAll(artists);
+
+		diffResult.dispatchUpdatesTo(this); // calls adapter's notify methods after diff is computed
 	}
 }
 

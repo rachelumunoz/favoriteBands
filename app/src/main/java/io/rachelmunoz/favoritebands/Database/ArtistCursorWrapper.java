@@ -1,13 +1,13 @@
-package io.rachelmunoz.favoritebands.database;
+package io.rachelmunoz.favoritebands.Database;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
 import java.util.UUID;
 
-import io.rachelmunoz.favoritebands.Artist;
+import io.rachelmunoz.favoritebands.ModelLayer.Artist;
 
-import static io.rachelmunoz.favoritebands.database.ArtistDbSchema.*;
+import static io.rachelmunoz.favoritebands.Database.ArtistDbSchema.*;
 
 /**
  * Created by rachelmunoz on 10/13/17.
