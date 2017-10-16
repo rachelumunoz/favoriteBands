@@ -1,9 +1,13 @@
 package io.rachelmunoz.favoritebands.LaunchActivity;
 
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -11,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,20 +41,36 @@ import rx.schedulers.Schedulers;
 
 public class SearchFragment extends Fragment {
 	private static final String TAG = "SearchFragment";
+	private static final String CURRENT_QUERY = "currentQuery";
 	private RecyclerView mRecyclerView;
 	private RecyclerAdapter mRecyclerAdapter;
 
 	private ApiInterface mApiSearchInterface;
 	private List<Artist> mArtists = new ArrayList<>();
 	private ApiInterface mApiArtistInterface;
+	private String mCurrentQuery;
 
 
-
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putString(CURRENT_QUERY, mCurrentQuery);
+	}
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
+
+		if (savedInstanceState != null){
+			mCurrentQuery = savedInstanceState.getString(CURRENT_QUERY);
+		}
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		searchArtist(mCurrentQuery);
 	}
 
 	@Nullable
@@ -68,42 +89,10 @@ public class SearchFragment extends Fragment {
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
 			@Override
 			public boolean onQueryTextSubmit(String query) {
+				mCurrentQuery = query;
 				refreshFragment();
-				Log.d(TAG, "query is " + query);
-				mApiSearchInterface.getArtists(query)
-						.flatMap(new Func1<RequestResponse, Observable<Artist>>() {
-							@Override
-							public Observable<Artist> call(RequestResponse requestResponse) {
-								return Observable.from(requestResponse.getData());
-							}
-						})
-						.flatMap(new Func1<Artist, Observable<Artist>>() {
-							@Override
-							public Observable<Artist> call(Artist artist) {
-								return mApiArtistInterface.getArtistDetails(artist.getName());
-							}
-						})
-						.subscribeOn(Schedulers.newThread())
-						.observeOn(AndroidSchedulers.mainThread())
-						.subscribe(new Subscriber<Artist>() {
-							@Override
-							public void onCompleted() {
-
-							}
-
-							@Override
-							public void onError(Throwable e) {
-
-							}
-
-							@Override
-							public void onNext(Artist artist) {
-								mArtists.add(artist);
-								updateUI();
-							}
-						});
-
-				updateUI(); // necessary?
+				searchArtist(query);
+				updateUI();
 				return true;
 			}
 
@@ -113,6 +102,41 @@ public class SearchFragment extends Fragment {
 			}
 		});
 		return v;
+	}
+
+	private void searchArtist(String query) {
+		mApiSearchInterface.getArtists(query)
+				.flatMap(new Func1<RequestResponse, Observable<Artist>>() {
+					@Override
+					public Observable<Artist> call(RequestResponse requestResponse) {
+						return Observable.from(requestResponse.getData());
+					}
+				})
+				.flatMap(new Func1<Artist, Observable<Artist>>() {
+					@Override
+					public Observable<Artist> call(Artist artist) {
+						return mApiArtistInterface.getArtistDetails(artist.getName());
+					}
+				})
+				.subscribeOn(Schedulers.newThread())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(new Subscriber<Artist>() {
+					@Override
+					public void onCompleted() {
+
+					}
+
+					@Override
+					public void onError(Throwable e) {
+
+					}
+
+					@Override
+					public void onNext(Artist artist) {
+						mArtists.add(artist);
+						updateUI();
+					}
+				});
 	}
 
 	private void updateUI(){
@@ -139,6 +163,20 @@ public class SearchFragment extends Fragment {
 		mRecyclerView.setAdapter(mRecyclerAdapter);
 	}
 
+
+
+//	@Override
+//	public void onItemClick(View view, int position) {
+//		mArtists.get(position).setFavorited(!mArtists.get(position).isFavorited());
+//
+//		mRecyclerAdapter.notifyItemChanged(position);
+//
+//		Drawable icon = ContextCompat.getDrawable(view.getContext(), R.drawable.favorite_false);
+//		icon.setColorFilter(new
+//				PorterDuffColorFilter(view.getContext().getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP));
+//
+//
+//	}
 }
 
 
