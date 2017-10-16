@@ -8,6 +8,9 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import io.rachelmunoz.favoritebands.Artist;
 import io.rachelmunoz.favoritebands.R;
 import io.rachelmunoz.favoritebands.REST.ApiInterface;
@@ -28,6 +31,7 @@ public class ArtistActivity extends AppCompatActivity {
 	private TextView mEventCountTextView;
 	private TextView mTrackerCountTextView;
 	private Artist mArtist;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,5 +73,10 @@ public class ArtistActivity extends AppCompatActivity {
 		mArtistNameTextView.setText(mArtist.getName());
 		mTrackerCountTextView.setText(String.valueOf(mArtist.getEventCount()));
 		mEventCountTextView.setText((String.valueOf(mArtist.getTrackerCount())));
+
+		Glide.with(this)
+			.load(mArtist.getImageUrl())
+			.apply(RequestOptions.circleCropTransform())
+			.into(mArtistImageView);
 	}
 }

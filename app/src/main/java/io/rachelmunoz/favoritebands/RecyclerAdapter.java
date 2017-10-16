@@ -16,6 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.List;
 
 import io.rachelmunoz.favoritebands.ArtistDetail.ArtistActivity;
@@ -23,6 +26,8 @@ import io.rachelmunoz.favoritebands.REST.ApiInterface;
 import io.rachelmunoz.favoritebands.REST.ArtistClient;
 
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
+import static io.rachelmunoz.favoritebands.RecyclerAdapter.ArtistHolder.EXTRA_ARTIST_NAME;
 
 
 /**
@@ -62,9 +67,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 		final Artist artist = mArtists.get(position);
 
 		if (artist == null) return;
-		holder.bind(artist);
+		holder.bind(artist, holder.itemView);
 
-
+		holder.itemView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Context context = view.getContext();
+				Intent intent = new Intent(context, ArtistActivity.class);
+				intent.putExtra(EXTRA_ARTIST_NAME, artist.getName());
+				context.startActivity(intent);
+			}
+		});
 //		if (artist.isFavorited()){
 //			Drawable icon = ContextCompat.getDrawable(holder.mFavoriteIcon.getContext(), R.drawable.favorite_false);
 //			icon.setColorFilter(new
@@ -133,16 +146,26 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 
 			mArtistImage = (ImageView) itemView.findViewById(R.id.artist_image);
 			mArtistName = (TextView) itemView.findViewById(R.id.artist_name);
-
 			mFavoriteIcon = (ImageView) itemView.findViewById(R.id.favorite_icon);
+
 		}
 
-		public void bind(Artist artist) {
+		public void bind(Artist artist, View v) {
 			mArtist = artist;
 			mArtistName.setText(mArtist.getName());
+			Glide.with(v)
+				.load(artist.getImageUrl())
+				.apply(RequestOptions.circleCropTransform())
+				.into(mArtistImage);
 		}
 
-
+//		@Override
+//		public void onClick(View view) {
+//			Context context = view.getContext();
+//			Intent intent = new Intent(context, ArtistActivity.class);
+//			intent.putExtra(EXTRA_ARTIST_NAME, mArtist.getName());
+//			context.startActivity(intent);
+//		}
 	}
 }
 
