@@ -22,20 +22,34 @@ public class MainActivity extends AppCompatActivity {
 		mViewPager = (ViewPager) findViewById(R.id.container);
 		setupViewPager(mViewPager);
 
+
 		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 		tabLayout.setupWithViewPager(mViewPager);
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (!(mViewPager == null)) {
 
+
+
+
+		}
+	}
 
 	private void setupViewPager(ViewPager viewPager){
-		SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
-		adapter.addFragment(new SearchFragment(), getString(R.string.search_tab));
-		adapter.addFragment(new FavoriteFragment(), getString(R.string.favorite_tab));
+		SectionsPageAdapter mAdapter = new SectionsPageAdapter(getSupportFragmentManager());
+		mAdapter.addFragment(new SearchFragment(), getString(R.string.search_tab));
+		mAdapter.addFragment(new FavoriteFragment(), getString(R.string.favorite_tab));
 
-		viewPager.setAdapter(adapter);
+		viewPager.setAdapter(mAdapter);
 	}
+
+
 }
