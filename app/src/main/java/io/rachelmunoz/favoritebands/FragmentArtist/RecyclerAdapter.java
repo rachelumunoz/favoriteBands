@@ -2,7 +2,11 @@ package io.rachelmunoz.favoritebands.FragmentArtist;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -33,27 +37,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 	private final String TAG = "RecyclerAdapter";
 
 	private List<Artist> mArtists;
-
-
+	private RecyclerAdapter mRecyclerAdapter;
 
 	public RecyclerAdapter(List<Artist> artists) {
 		mArtists = artists;
+		mRecyclerAdapter = this;
 	}
-
-
 
 	@Override
 	public ArtistHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-		ArtistHolder holder = new ArtistHolder(layoutInflater, parent);
-		holder.itemView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-
-
-			}
-		});
-		return holder;
+		return new ArtistHolder(layoutInflater, parent);
 	}
 
 	@Override
@@ -62,63 +56,56 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 		final Artist artist = mArtists.get(position);
 
 		if (artist == null) return;
+
 		holder.bind(artist, holder.itemView);
 
+		// click listener on entire row
 		holder.itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Context context = view.getContext();
-				Intent intent = new Intent(context, ArtistActivity.class);
-				intent.putExtra(EXTRA_ARTIST_NAME, artist.getName());
-				context.startActivity(intent);
+				artistDetailIntent(view, artist);
 			}
 		});
-//		if (artist.isFavorited()){
-//			Drawable icon = ContextCompat.getDrawable(holder.mFavoriteIcon.getContext(), R.drawable.favorite_false);
-//			icon.setColorFilter(new
-//					PorterDuffColorFilter(holder.mFavoriteIcon.getContext().getResources().getColor(R.color.colorPrimary),PorterDuff.Mode.SRC_ATOP));
-//
-////			holder.mFavoriteIcon.setImageDrawable(icon);
-//		}
-//
-//
+
+		// click listener on favorite icon
 		holder.mFavoriteIcon.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-
-				Artist artist = mArtists.get(position);
-				boolean favorited = artist.isFavorited();
-				artist.setFavorited(!favorited);
-				boolean result = artist.isFavorited();
-
-				Toast.makeText(view.getContext(), artist.getName()+ " is favorited: " + result, Toast.LENGTH_SHORT).show();
-
-
-				if( artist.isFavorited() == true){
-					artist.addUUID();
-					ArtistLab.get(view.getContext().getApplicationContext()).addArtist(artist);
-				} else {
-					ArtistLab.get(view.getContext().getApplicationContext()).updateArtist(artist);
-				}
-
-
-
-
-//				Drawable icon = ContextCompat.getDrawable(holder.mFavoriteIcon.getContext(), R.drawable.favorite_false);
-//				icon.setColorFilter(new
-//						PorterDuffColorFilter(holder.mFavoriteIcon.getContext().getResources().getColor(R.color.colorPrimary),PorterDuff.Mode.SRC_ATOP));
-//
-//				holder.mFavoriteIcon.setImageDrawable(icon);
+				toggleArtistFavorited(artist, position);
+				toggleFavoritedInDB(view, artist);
+//				Toast.makeText(view.getContext(), artist.getName()+ " is favorited: " + artist.isFavorited(), Toast.LENGTH_SHORT).show();
 			}
 		});
 
 	}
 
-//	public void changeImage(int position) {
-//		mArtists.get(position).setFavorited(!mArtists.get(position).isFavorited());
-//
-//
-//	}
+	private void artistDetailIntent(View view, Artist artist) {
+		Context context = view.getContext();
+		Intent intent = new Intent(context, ArtistActivity.class);
+		intent.putExtra(EXTRA_ARTIST_NAME, artist.getName());
+		context.startActivity(intent);
+	}
+
+	private void toggleArtistFavorited(Artist artist, int position) {
+		boolean favorited = artist.isFavorited();
+		artist.setFavorited(!favorited);
+		mRecyclerAdapter.notifyItemChanged(position);
+		mArtists.set(position, artist);
+	}
+	// interface Callbacks
+		// in searchfragment - remove from list
+
+	private void toggleFavoritedInDB(View view, Artist artist) {
+		if( artist.isFavorited() == true && artist.getUuid() == null){
+			// add UUID to Pojo for out DB
+			artist.addUUID();
+			// add to DB
+			ArtistLab.get(view.getContext().getApplicationContext()).addArtist(artist);
+		} else {
+			// already in DB, toggle favorited field
+			ArtistLab.get(view.getContext().getApplicationContext()).updateArtist(artist);
+		}
+	}
 
 	@Override
 	public int getItemCount() {
@@ -148,6 +135,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 		public void bind(Artist artist, View v) {
 			mArtist = artist;
 			mArtistName.setText(mArtist.getName() + artist.getEventCount());
+
 			Glide.with(v)
 				.load(artist.getImageUrl())
 				.apply(RequestOptions
@@ -155,28 +143,25 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 						.placeholder(new ColorDrawable(v.getResources().getColor(R.color.colorGrey)))
 						)
 				.into(mArtistImage);
+
+			setFavoritedIcon(artist, v);
 		}
 
-//		@Override
-//		public void onClick(View view) {
-//			Context context = view.getContext();
-//			Intent intent = new Intent(context, ArtistActivity.class);
-//			intent.putExtra(EXTRA_ARTIST_NAME, mArtist.getName());
-//			context.startActivity(intent);
-//		}
+		private void setFavoritedIcon(Artist artist, View v) {
+			if (artist.isFavorited()){
+				Glide.with(v)
+						.load(v.getResources().getDrawable(R.drawable.favorite_true)) // drawable loading from the placeholder
+						.apply(new RequestOptions().placeholder(v.getResources().getDrawable(R.drawable.favorite_true)))
+						.into(mFavoriteIcon);
+			} else {
+				mFavoriteIcon.setImageDrawable(v.getResources().getDrawable(R.drawable.favorite_false));
+			}
+		}
 	}
 
-	public void swapItems(List<Artist> artists) {
-		// compute diffs
-		final ArtistDiffCallback diffCallback = new ArtistDiffCallback(mArtists, artists);
-		final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
 
-		// clear contacts and add
-		mArtists.clear();
-		mArtists.addAll(artists);
 
-		diffResult.dispatchUpdatesTo(this); // calls adapter's notify methods after diff is computed
-	}
+
 }
 
 
@@ -186,68 +171,4 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 
 
 
-
-
-//	private void updateFavorite(View view, int pos){
-//
-//		ImageView favoriteIcon = (ImageView) view;
-//
-//		if (view.getVerticalScrollbarPosition() == pos){
-
-//			Drawable icon = ContextCompat.getDrawable(view.getContext(), R.drawable.favorite_false);
-//			icon.setColorFilter(new
-//					PorterDuffColorFilter(view.getContext().getResources().getColor(R.color.colorPrimary),PorterDuff.Mode.SRC_ATOP));
-//
-//			favoriteIcon.setImageDrawable(icon);
-//		}
-//
-//	}
-
-
-
-//		@Override
-//		public void onClick(View view) {
-//			if (view.getId() == mFavoriteIcon.getId()){
-//				Drawable icon = ContextCompat.getDrawable(view.getContext(), R.drawable.favorite_false);
-//				icon.setColorFilter(new
-//						PorterDuffColorFilter(view.getContext().getResources().getColor(R.color.colorPrimary),PorterDuff.Mode.SRC_ATOP));
-//
-//				// replace current ArtistHolder's icon with the new colored one
-//				mFavoriteIcon.setImageDrawable(icon);
-//			} else {
-//				Toast.makeText(view.getContext(), "ROW PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
-//			}
-//		}
-
-
-
-
-//		.setOnClickListener(new View.OnClickListener(){
-//			@Override
-//			public void onClick(View view) {
-//				// new colored icon
-//				Drawable icon = ContextCompat.getDrawable(view.getContext(), R.drawable.favorite_false);
-//				icon.setColorFilter(new
-//						PorterDuffColorFilter(view.getContext().getResources().getColor(R.color.colorPrimary),PorterDuff.Mode.SRC_ATOP));
-//
-//				// replace current ArtistHolder's icon with the new colored one
-//				mFavoriteIcon.setImageDrawable(icon);
-//
-//			}
-//		});
-
-//		@Override
-//		public void onClick(View view) {
-////			if (view == mFavoriteIcon){
-////				Drawable icon = ContextCompat.getDrawable(view.getContext(), R.drawable.favorite_false);
-////				icon.setColorFilter(new
-////					PorterDuffColorFilter(view.getContext().getResources().getColor(R.color.colorPrimary),PorterDuff.Mode.SRC_ATOP));
-////
-////				mFavoriteIcon.setImageDrawable(icon);
-////			} else {
-//				Context context = view.getContext();
-//				Intent intent = new Intent(context, ArtistActivity.class);
-//				intent.putExtra(EXTRA_ARTIST_NAME, mArtist.getName());
-//				context.startActivity(intent);
-////			}
 
