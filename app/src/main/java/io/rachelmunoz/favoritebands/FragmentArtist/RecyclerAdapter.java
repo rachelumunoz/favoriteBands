@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,13 +36,22 @@ import static io.rachelmunoz.favoritebands.FragmentArtist.RecyclerAdapter.Artist
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ArtistHolder> {
 	private final String TAG = "RecyclerAdapter";
+	private Callback mCallback;
 
 	private List<Artist> mArtists;
-	private RecyclerAdapter mRecyclerAdapter;
+
+
+	public  interface Callback {
+		void onHeartClick(int position, Artist artist, List<Artist> artists);
+	}
+
+	public void setOnHeartClickedListener(Callback l) {
+		mCallback = l;
+	}
 
 	public RecyclerAdapter(List<Artist> artists) {
+		super();
 		mArtists = artists;
-		mRecyclerAdapter = this;
 	}
 
 	@Override
@@ -71,9 +81,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 		holder.mFavoriteIcon.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				toggleArtistFavorited(artist, position);
-				toggleFavoritedInDB(view, artist);
-//				Toast.makeText(view.getContext(), artist.getName()+ " is favorited: " + artist.isFavorited(), Toast.LENGTH_SHORT).show();
+				if (mCallback != null){
+					toggleArtistFavorited(artist, position);
+					toggleFavoritedInDB(view, artist);
+					mCallback.onHeartClick(position, artist, mArtists);
+				}
 			}
 		});
 
@@ -86,14 +98,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 		context.startActivity(intent);
 	}
 
-	private void toggleArtistFavorited(Artist artist, int position) {
+	protected void toggleArtistFavorited(Artist artist, int position) {
 		boolean favorited = artist.isFavorited();
 		artist.setFavorited(!favorited);
-		mRecyclerAdapter.notifyItemChanged(position);
 		mArtists.set(position, artist);
 	}
-	// interface Callbacks
-		// in searchfragment - remove from list
 
 	private void toggleFavoritedInDB(View view, Artist artist) {
 		if( artist.isFavorited() == true && artist.getUuid() == null){
@@ -123,12 +132,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 		private ImageView mFavoriteIcon;
 		private Artist mArtist;
 
+
+
 		public ArtistHolder(LayoutInflater inflater, ViewGroup parent) {
 			super(inflater.inflate(R.layout.list_item_artist, parent, false));
 
 			mArtistImage = (ImageView) itemView.findViewById(R.id.artist_image);
 			mArtistName = (TextView) itemView.findViewById(R.id.artist_name);
 			mFavoriteIcon = (ImageView) itemView.findViewById(R.id.favorite_icon);
+
 
 		}
 

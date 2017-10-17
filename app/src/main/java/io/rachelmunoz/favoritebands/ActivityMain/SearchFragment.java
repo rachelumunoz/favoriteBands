@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +37,12 @@ import rx.schedulers.Schedulers;
 public class SearchFragment extends Fragment {
 	private static final String TAG = "SearchFragment";
 	private static final String CURRENT_QUERY = "currentQuery";
+
 	private RecyclerView mRecyclerView;
 	private RecyclerAdapter mRecyclerAdapter;
 
 	private ApiInterface mApiSearchInterface;
 	private List<Artist> mArtists = new ArrayList<>();
-	List<Artist> received = new ArrayList<>();
 
 	private ApiInterface mApiArtistInterface;
 	private String mCurrentQuery;
@@ -74,12 +75,12 @@ public class SearchFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_search, container, false);
 
-		final SearchView searchView = (SearchView) v.findViewById(R.id.search_view); // search View
+		final SearchView searchView = (SearchView) v.findViewById(R.id.search_view);
+
 		mRecyclerView = v.findViewById(R.id.artist_recycler_view);
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-		mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),
-				DividerItemDecoration.VERTICAL));
-		updateUI();
+		mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+
 
 		mApiSearchInterface = SearchClient.getApiClient().create(ApiInterface.class);
 		mApiArtistInterface = ArtistClient.getApiClient().create(ApiInterface.class);
@@ -98,6 +99,8 @@ public class SearchFragment extends Fragment {
 				return false;
 			}
 		});
+		updateUI();
+
 		return v;
 	}
 
@@ -121,7 +124,6 @@ public class SearchFragment extends Fragment {
 				.subscribe(new Subscriber<Artist>() {
 					@Override
 					public void onCompleted() {
-
 					}
 
 					@Override
@@ -132,7 +134,6 @@ public class SearchFragment extends Fragment {
 					@Override
 					public void onNext(Artist artist) {
 						mArtists.add(artist);
-//						received.add(artist);
 //						mRecyclerAdapter.swapItems(mArtists);
 						updateUI();
 						Log.d(TAG, "artist name is onnext "+ artist.getName());
@@ -154,6 +155,7 @@ public class SearchFragment extends Fragment {
 			setupAdapter();
 		} else {
 //			mArtists = new ArrayList<>(); // need to clear mArtists
+			// use diff util
 			mArtists.clear();
 			mRecyclerAdapter.setArtists(mArtists);
 			mRecyclerAdapter.notifyDataSetChanged();
@@ -162,23 +164,19 @@ public class SearchFragment extends Fragment {
 
 	private void setupAdapter() {
 		mRecyclerAdapter = new RecyclerAdapter(mArtists);
+		mRecyclerAdapter.setOnHeartClickedListener(new RecyclerAdapter.Callback() {
+			@Override
+			public void onHeartClick(int position, Artist artist, List<Artist> artists) {
+				Log.d(TAG, "HEart clicked!! at " + String.valueOf(position));
+				// just do logic of modifying artist in db
+
+				artists.add(artist);
+				mRecyclerAdapter.notifyDataSetChanged();
+			}
+		});
 		mRecyclerView.setAdapter(mRecyclerAdapter);
 	}
 
-
-
-//	@Override
-//	public void onItemClick(View view, int position) {
-//		mArtists.get(position).setFavorited(!mArtists.get(position).isFavorited());
-//
-//		mRecyclerAdapter.notifyItemChanged(position);
-//
-//		Drawable icon = ContextCompat.getDrawable(view.getContext(), R.drawable.favorite_false);
-//		icon.setColorFilter(new
-//				PorterDuffColorFilter(view.getContext().getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP));
-//
-//
-//	}
 }
 
 
