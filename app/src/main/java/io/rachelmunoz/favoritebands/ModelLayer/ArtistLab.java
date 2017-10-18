@@ -56,7 +56,6 @@ public class ArtistLab {
 		return artists;
 	}
 
-
 	public List<Artist> getFavoritedArtists() {
 		List<Artist> artists = new ArrayList<>();
 
@@ -92,28 +91,6 @@ public class ArtistLab {
 		mDatabase.update(ArtistDbTable.NAME, values,
 				ArtistDbTable.Cols.UUID + " = ?",
 				new String[]{uuidString});
-
-//		mDatabase.update(ArtistDbTable.NAME, values,
-//				ArtistDbTable.Cols.BIT_ID + " = ?",
-//				new String[]{artist.getBitId()});
-	}
-
-	public Artist getArtist(UUID uuid){
-
-		ArtistCursorWrapper cursor = queryArtists(
-				ArtistDbTable.Cols.UUID + " = ?",
-				new String[] { uuid.toString() }
-		);
-
-		try {
-			if (cursor.getCount() == 0){
-				return null;
-			}
-			cursor.moveToFirst();
-			return cursor.getArtist();
-		} finally {
-			cursor.close();
-		}
 	}
 
 	public Artist getArtistByBitId(String bitId){
@@ -133,12 +110,7 @@ public class ArtistLab {
 			cursor.close();
 		}
 	}
-//
-//	whereClause = ImageThoughtTable.Cols.COMPLETE + " = ?";
-//	whereArgs =  new String[]{String.valueOf(1)};
 
-
-	// get all Artists that have been favorited
 	private ArtistCursorWrapper queryArtists(String whereClause, String[] whereArgs){
 		Cursor cursor = mDatabase.query(
 				ArtistDbTable.NAME,

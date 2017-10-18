@@ -35,17 +35,20 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 
 	private List<Artist> mArtists;
 
-
 	public  interface Callback {
-		void onHeartClick(int position, Artist artist, List<Artist> artists);
+		void onHeartClick(int position, List<Artist> artists);
 	}
 
-	public void setOnHeartClickedListener(Callback l) {
-		mCallback = l;
+	public void setOnHeartClickedListener(Callback listener) {
+		mCallback = listener;
 	}
 
 	public RecyclerAdapter(List<Artist> artists) {
 		super();
+		mArtists = artists;
+	}
+
+	public void setArtists(List<Artist> artists) {
 		mArtists = artists;
 	}
 
@@ -60,7 +63,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 
 		final Artist artist = mArtists.get(position);
 
-		holder.bind(artist, holder.itemView);
+		holder.bindArtist(artist, holder.itemView);
 
 		// click listener on entire row
 		holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -74,13 +77,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 		holder.mFavoriteIcon.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if (mCallback != null){
-					toggleArtistFavorited(artist, position, view);
-					mCallback.onHeartClick(position, artist, mArtists);
-				}
+			if (mCallback != null){
+				toggleArtistFavorited(artist, position, view);
+				mCallback.onHeartClick(position, mArtists);
+			}
 			}
 		});
 
+	}
+
+	@Override
+	public int getItemCount() {
+		return mArtists.size();
 	}
 
 	private void artistDetailIntent(View view, Artist artist) {
@@ -96,7 +104,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 	protected void toggleArtistFavorited(Artist artist, int position, View view) {
 		boolean favorited = artist.isFavorited();
 		artist.setFavorited(!favorited);
+
 		toggleFavoritedInDB(view, artist);
+
 		mArtists.set(position, artist);
 	}
 
@@ -107,14 +117,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 		} else {
 			ArtistLab.get(view.getContext()).updateArtist(artist);
 		}
-	}
-	@Override
-	public int getItemCount() {
-		return mArtists.size();
-	}
-
-	public void setArtists(List<Artist> artists) {
-		mArtists = artists;
 	}
 
 	public class ArtistHolder extends RecyclerView.ViewHolder  {
@@ -132,12 +134,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 			mArtistImage = (ImageView) itemView.findViewById(R.id.artist_image);
 			mArtistName = (TextView) itemView.findViewById(R.id.artist_name);
 			mFavoriteIcon = (ImageView) itemView.findViewById(R.id.favorite_icon);
-
 		}
 
-		public void bind(Artist artist, View v) {
+		public void bindArtist(Artist artist, View v) {
 			mArtist = artist;
-			mArtistName.setText(mArtist.getName() + artist.getEventCount());
+			mArtistName.setText(mArtist.getName());
 
 			Glide.with(v)
 				.load(artist.getImageUrl())

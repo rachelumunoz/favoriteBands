@@ -15,6 +15,7 @@ import io.rachelmunoz.favoritebands.ModelLayer.Artist;
 
 public class RequestResponse {
 
+	// should add a check for status ok
 	@SerializedName("status")
 	@Expose
 	private String status;
@@ -22,14 +23,6 @@ public class RequestResponse {
 	@SerializedName("data")
 	@Expose
 	private List<Artist> data = null;
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
 
 	public List<Artist> getData() {
 		return data;

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.rachelmunoz.favoritebands.R;
 
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 	private ViewPager mViewPager;
 	private SectionsPageAdapter mAdapter;
 
+	private ArrayList<PagerItem> mPagerItems = new ArrayList<>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +44,15 @@ public class MainActivity extends AppCompatActivity {
 
 			@Override
 			public void onPageSelected(int position) {
-					ArrayList<PagerItem> pagerItems = new ArrayList<>();
-					pagerItems.add(new PagerItem(getString(R.string.search_tab), new SearchFragment()));
-					pagerItems.add(new PagerItem(getString(R.string.favorite_tab), new FavoriteFragment()));
+				ArrayList<PagerItem> pagerItems = new ArrayList<>();
 
-					mAdapter.setPagerItems(pagerItems);
-					mAdapter.notifyDataSetChanged();
+				pagerItems.add(new PagerItem(getString(R.string.search_tab), new SearchFragment()));
+				pagerItems.add(new PagerItem(getString(R.string.favorite_tab), new FavoriteFragment()));
+
+				mAdapter.setPagerItems(pagerItems);
+				mAdapter.notifyDataSetChanged();
 
 			}
-
 			@Override
 			public void onPageScrollStateChanged(int state) {
 
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private void setupViewPager(final ViewPager viewPager){
 		ArrayList<PagerItem> pagerItems = new ArrayList<>();
+
 		pagerItems.add(new PagerItem(getString(R.string.search_tab), new SearchFragment()));
 		pagerItems.add(new PagerItem(getString(R.string.favorite_tab), new FavoriteFragment()));
 
@@ -70,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
 		viewPager.setAdapter(mAdapter);
 		mAdapter.notifyDataSetChanged();
-
 	}
 
 

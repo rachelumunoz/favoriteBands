@@ -23,20 +23,17 @@ import io.rachelmunoz.favoritebands.FragmentArtist.RecyclerAdapter;
  * Created by rachelmunoz on 10/12/17.
  */
 
-public class FavoriteFragment extends Fragment {
+public class FavoriteFragment extends Fragment{
 
 	private static final String TAG = "FavoriteFragment";
+
 	private RecyclerView mRecyclerView;
 	private RecyclerAdapter mAdapter;
-
-
-
 
 	@Override
 	public void onResume() {
 		super.onResume();
-//		updateUI();
-//		mAdapter.notifyDataSetChanged();
+		updateUI();
 	}
 
 
@@ -54,28 +51,29 @@ public class FavoriteFragment extends Fragment {
 		return v;
 	}
 
-
-	public void updateUI(){
+	private void updateUI(){
 		ArtistLab artistLab = ArtistLab.get(getActivity());
-		List<Artist> artists = artistLab.getArtists();
+		List<Artist> artists = artistLab.getFavoritedArtists();
 
 		if (mAdapter == null){
-			mAdapter = new RecyclerAdapter(artists);
-			mAdapter.setOnHeartClickedListener(new RecyclerAdapter.Callback() {
-				@Override
-				public void onHeartClick(int position, Artist artist, List<Artist> artists) {
-					Log.d(TAG, "HEart clicked at " + String.valueOf(position));
-					// remove from the recycler view
-					artists.remove(position);
-					mAdapter.notifyItemRemoved(position);
-
-				}
-			});
+			setupAdapter(artists);
 			mRecyclerView.setAdapter(mAdapter);
 		} else {
-			mAdapter.setArtists(artists); // updates crimes incase it is different
+			mAdapter.setArtists(artists);
 			mAdapter.notifyDataSetChanged();
 		}
+	}
+
+	private void setupAdapter(List<Artist> artists) {
+		mAdapter = new RecyclerAdapter(artists);
+		mAdapter.setOnHeartClickedListener(new RecyclerAdapter.Callback() {
+			@Override
+			public void onHeartClick(int position, List<Artist> artists) {
+				artists.remove(position);
+				mAdapter.notifyItemRemoved(position);
+
+			}
+		});
 	}
 
 	@Override

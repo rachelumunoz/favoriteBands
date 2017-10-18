@@ -15,8 +15,6 @@ import java.util.List;
 
 public class SectionsPageAdapter extends FragmentStatePagerAdapter {
 
-	private final List<Fragment> mFragmentList = new ArrayList<>();
-	private final List<String> mFragmentTitleList = new ArrayList<>();
 	private  FragmentManager mFragmentManager;
 	private  ArrayList<PagerItem> mPagerItems;
 
@@ -24,12 +22,6 @@ public class SectionsPageAdapter extends FragmentStatePagerAdapter {
 		super(fm);
 		mFragmentManager = fm;
 		mPagerItems = pagerItems;
-	}
-
-
-	public void addFragment(Fragment fragment, String title){
-		mFragmentList.add(fragment);
-		mFragmentTitleList.add(title);
 	}
 
 	@Override

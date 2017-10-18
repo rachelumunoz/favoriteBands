@@ -1,5 +1,6 @@
 package io.rachelmunoz.favoritebands.ActivityMain;
 
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,24 +12,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.rachelmunoz.favoritebands.ModelLayer.Artist;
-import io.rachelmunoz.favoritebands.R;
 import io.rachelmunoz.favoritebands.Api.ApiInterface;
 import io.rachelmunoz.favoritebands.Api.ArtistClient;
 import io.rachelmunoz.favoritebands.Api.RequestResponse;
 import io.rachelmunoz.favoritebands.Api.SearchClient;
 import io.rachelmunoz.favoritebands.FragmentArtist.RecyclerAdapter;
+import io.rachelmunoz.favoritebands.ModelLayer.Artist;
+import io.rachelmunoz.favoritebands.R;
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
-
 
 /**
  * Created by rachelmunoz on 10/12/17.
@@ -36,22 +36,22 @@ import rx.schedulers.Schedulers;
 
 public class SearchFragment extends Fragment {
 	private static final String TAG = "SearchFragment";
-	private static final String CURRENT_QUERY = "currentQuery";
+	public static final String KEY_QUERY = "currentQuery";
 
 	private RecyclerView mRecyclerView;
 	private RecyclerAdapter mRecyclerAdapter;
 
-	private ApiInterface mApiSearchInterface;
 	private List<Artist> mArtists = new ArrayList<>();
 
-	private ApiInterface mApiArtistInterface;
 	private String mCurrentQuery;
+	private ApiInterface mApiArtistInterface;
+	private ApiInterface mApiSearchInterface;
 
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putString(CURRENT_QUERY, mCurrentQuery);
+		outState.putString(KEY_QUERY, mCurrentQuery);
 	}
 
 	@Override
@@ -60,14 +60,15 @@ public class SearchFragment extends Fragment {
 		setHasOptionsMenu(true);
 
 		if (savedInstanceState != null){
-			mCurrentQuery = savedInstanceState.getString(CURRENT_QUERY);
+			mCurrentQuery = savedInstanceState.getString(KEY_QUERY);
 		}
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		searchArtist(mCurrentQuery);
+		// not in use at the moment because of bug with ViewPager swiping
+//		searchArtist(mCurrentQuery);
 	}
 
 	@Nullable
@@ -75,12 +76,11 @@ public class SearchFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_search, container, false);
 
-		final SearchView searchView = (SearchView) v.findViewById(R.id.search_view);
+		SearchView searchView = (SearchView) v.findViewById(R.id.search_view);
 
 		mRecyclerView = v.findViewById(R.id.artist_recycler_view);
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 		mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
-
 
 		mApiSearchInterface = SearchClient.getApiClient().create(ApiInterface.class);
 		mApiArtistInterface = ArtistClient.getApiClient().create(ApiInterface.class);
@@ -99,14 +99,14 @@ public class SearchFragment extends Fragment {
 				return false;
 			}
 		});
-		updateUI();
 
+		updateUI();
 		return v;
 	}
 
 	private void searchArtist(String query) {
 
-		mApiSearchInterface.getArtists(query)
+		 mApiSearchInterface.getArtists(query)
 				.flatMap(new Func1<RequestResponse, Observable<Artist>>() {
 					@Override
 					public Observable<Artist> call(RequestResponse requestResponse) {
@@ -124,6 +124,7 @@ public class SearchFragment extends Fragment {
 				.subscribe(new Subscriber<Artist>() {
 					@Override
 					public void onCompleted() {
+
 					}
 
 					@Override
@@ -134,9 +135,7 @@ public class SearchFragment extends Fragment {
 					@Override
 					public void onNext(Artist artist) {
 						mArtists.add(artist);
-//						mRecyclerAdapter.swapItems(mArtists);
 						updateUI();
-						Log.d(TAG, "artist name is onnext "+ artist.getName());
 					}
 				});
 	}
@@ -154,8 +153,7 @@ public class SearchFragment extends Fragment {
 		if (mRecyclerAdapter == null){
 			setupAdapter();
 		} else {
-//			mArtists = new ArrayList<>(); // need to clear mArtists
-			// use diff util
+			// use diff util?
 			mArtists.clear();
 			mRecyclerAdapter.setArtists(mArtists);
 			mRecyclerAdapter.notifyDataSetChanged();
@@ -166,17 +164,12 @@ public class SearchFragment extends Fragment {
 		mRecyclerAdapter = new RecyclerAdapter(mArtists);
 		mRecyclerAdapter.setOnHeartClickedListener(new RecyclerAdapter.Callback() {
 			@Override
-			public void onHeartClick(int position, Artist artist, List<Artist> artists) {
-				Log.d(TAG, "HEart clicked!! at " + String.valueOf(position));
-				// just do logic of modifying artist in db
-
-				artists.add(artist);
-				mRecyclerAdapter.notifyDataSetChanged();
+			public void onHeartClick(int position, List<Artist> artists) {
+				mRecyclerAdapter.notifyItemChanged(position);
 			}
 		});
 		mRecyclerView.setAdapter(mRecyclerAdapter);
 	}
-
 }
 
 
