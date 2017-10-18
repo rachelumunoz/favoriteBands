@@ -10,15 +10,13 @@ import java.util.UUID;
  */
 
 public class Artist {
-	private UUID mUuid;
-
 	@SerializedName("name")
 	@Expose
 	private String mName;
 
 	@SerializedName("id")
 	@Expose
-	private String mBITid;
+	private String mBitId;
 
 	@SerializedName("media_id")
 	@Expose
@@ -36,35 +34,18 @@ public class Artist {
 	@Expose
 	private int mEventCount;
 
-	private boolean mFavorited;
+	private boolean mFavorited = false;
+	private UUID mUuid;
 
-//	public Artist(){
-//		mUuid = UUID.randomUUID();
-//		mName = "Test Artist";
-//		mImageUrl = "https://vignette.wikia.nocookie.net/acourtofthornsandroses/images/a/a5/Cute_kitty.jpg/revision/latest/scale-to-width-down/540?cb=20170220162435";
-//	}
-
-//	public Artist(String mediaId, String name){
-//		mMediaId = mediaId;
-//		mName = name;
-//	}
 
 	public Artist(){}
 
-//	public Artist(UUID uuid){
-//		mUuid = uuid;
-//		mName = " TEsting";
-//		mFavorited = true;
-//		mImageUrl = "https://vignette.wikia.nocookie.net/acourtofthornsandroses/images/a/a5/Cute_kitty.jpg/revision/latest/scale-to-width-down/540?cb=20170220162435";
-//	}
-
-
-	public String getBITid() {
-		return mBITid;
+	public String getBitId() {
+		return mBitId;
 	}
 
-	public void setBITid(String BITid) {
-		mBITid = BITid;
+	public void setBitId(String bitId) {
+		mBitId = bitId;
 	}
 
 	public void setUuid(UUID uuid) {
