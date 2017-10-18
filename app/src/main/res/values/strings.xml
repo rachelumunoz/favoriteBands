@@ -6,4 +6,6 @@
 
     <string name="search_tab">Artists</string>
     <string name="favorite_tab">Favorites</string>
+    <string name="event_label">Events: </string>
+    <string name="tracker_label">Followers: </string>
 </resources>

@@ -38,7 +38,6 @@
         android:id="@+id/favorite_icon"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:src="@drawable/favorite_false"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
