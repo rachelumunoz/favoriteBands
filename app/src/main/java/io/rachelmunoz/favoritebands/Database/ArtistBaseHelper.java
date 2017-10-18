@@ -24,8 +24,8 @@ public class ArtistBaseHelper extends SQLiteOpenHelper {
 			" _id integer primary key autoincrement, " +
 				ArtistDbTable.Cols.UUID + ", " +
 				ArtistDbTable.Cols.BIT_ID + ", " +
-				ArtistDbTable.Cols.NAME + ", " +
 				ArtistDbTable.Cols.MEDIA_ID + ", " +
+				ArtistDbTable.Cols.NAME + ", " +
 				ArtistDbTable.Cols.FAVORITED + ", " +
 				ArtistDbTable.Cols.IMAGE_URL + ", " +
 				ArtistDbTable.Cols.EVENT_COUNT + ", " +

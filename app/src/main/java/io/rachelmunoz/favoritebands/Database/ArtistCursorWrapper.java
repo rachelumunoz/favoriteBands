@@ -31,7 +31,7 @@ public class ArtistCursorWrapper extends CursorWrapper {
 
 		Artist artist = new Artist();
 		artist.setUuid(UUID.fromString(uuid));
-		artist.setBITid(bitID);
+		artist.setBitId(bitID);
 		artist.setName(name);
 		artist.setMediaId(mediaId);
 		artist.setImageUrl(imageUrl);

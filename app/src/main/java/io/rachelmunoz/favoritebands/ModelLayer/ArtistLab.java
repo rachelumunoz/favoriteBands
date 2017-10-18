@@ -13,6 +13,8 @@ import io.rachelmunoz.favoritebands.Database.ArtistBaseHelper;
 import io.rachelmunoz.favoritebands.Database.ArtistCursorWrapper;
 import io.rachelmunoz.favoritebands.Database.ArtistDbSchema.ArtistDbTable;
 
+import static android.R.attr.id;
+
 /**
  * Created by rachelmunoz on 10/13/17.
  */
@@ -54,6 +56,28 @@ public class ArtistLab {
 		return artists;
 	}
 
+
+	public List<Artist> getFavoritedArtists() {
+		List<Artist> artists = new ArrayList<>();
+
+		String whereClause = ArtistDbTable.Cols.FAVORITED + " = ?";
+		String[] whereArgs = new String[]{String.valueOf(1)};
+
+		ArtistCursorWrapper cursor = queryArtists(whereClause, whereArgs);
+
+		try {
+			cursor.moveToFirst();
+			while(!cursor.isAfterLast()){
+				artists.add(cursor.getArtist());
+				cursor.moveToNext();
+			}
+		} finally {
+			cursor.close();
+		}
+
+		return artists;
+	}
+
 	public void addArtist(Artist artist){
 		ContentValues values = getContentValues(artist);
 
@@ -62,11 +86,16 @@ public class ArtistLab {
 
 	public void updateArtist(Artist artist){
 		String uuidString = artist.getUuid().toString();
+
 		ContentValues values = getContentValues(artist);
 
 		mDatabase.update(ArtistDbTable.NAME, values,
 				ArtistDbTable.Cols.UUID + " = ?",
 				new String[]{uuidString});
+
+//		mDatabase.update(ArtistDbTable.NAME, values,
+//				ArtistDbTable.Cols.BIT_ID + " = ?",
+//				new String[]{artist.getBitId()});
 	}
 
 	public Artist getArtist(UUID uuid){
@@ -87,11 +116,11 @@ public class ArtistLab {
 		}
 	}
 
-	public Artist getArtistBitID(String id){
+	public Artist getArtistByBitId(String bitId){
 
 		ArtistCursorWrapper cursor = queryArtists(
 				ArtistDbTable.Cols.BIT_ID + " = ?",
-				new String[] { id }
+				new String[] { bitId }
 		);
 
 		try {
@@ -108,12 +137,14 @@ public class ArtistLab {
 //	whereClause = ImageThoughtTable.Cols.COMPLETE + " = ?";
 //	whereArgs =  new String[]{String.valueOf(1)};
 
+
+	// get all Artists that have been favorited
 	private ArtistCursorWrapper queryArtists(String whereClause, String[] whereArgs){
 		Cursor cursor = mDatabase.query(
 				ArtistDbTable.NAME,
 				null,
-				ArtistDbTable.Cols.FAVORITED + " = ?",
-				new String[]{String.valueOf(1)},
+				whereClause,
+				whereArgs,
 				null,
 				null,
 				null
@@ -125,8 +156,9 @@ public class ArtistLab {
 
 	private static ContentValues getContentValues(Artist artist){
 		ContentValues values = new ContentValues();
+
 		values.put(ArtistDbTable.Cols.UUID, artist.getUuid().toString());
-		values.put(ArtistDbTable.Cols.BIT_ID, artist.getBITid());
+		values.put(ArtistDbTable.Cols.BIT_ID, artist.getBitId());
 		values.put(ArtistDbTable.Cols.NAME, artist.getName());
 		values.put(ArtistDbTable.Cols.MEDIA_ID, artist.getMediaId());
 		values.put(ArtistDbTable.Cols.FAVORITED, artist.isFavorited() ? Integer.toString(1) : Integer.toString(0));

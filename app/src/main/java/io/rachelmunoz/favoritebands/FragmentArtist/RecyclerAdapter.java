@@ -2,20 +2,13 @@ package io.rachelmunoz.favoritebands.FragmentArtist;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -27,6 +20,7 @@ import io.rachelmunoz.favoritebands.ActivityArtist.ArtistActivity;
 import io.rachelmunoz.favoritebands.ModelLayer.ArtistLab;
 import io.rachelmunoz.favoritebands.R;
 
+import static io.rachelmunoz.favoritebands.FragmentArtist.RecyclerAdapter.ArtistHolder.EXTRA_ARTIST_FAVORITED;
 import static io.rachelmunoz.favoritebands.FragmentArtist.RecyclerAdapter.ArtistHolder.EXTRA_ARTIST_NAME;
 
 
@@ -35,6 +29,7 @@ import static io.rachelmunoz.favoritebands.FragmentArtist.RecyclerAdapter.Artist
  */
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ArtistHolder> {
+
 	private final String TAG = "RecyclerAdapter";
 	private Callback mCallback;
 
@@ -65,8 +60,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 
 		final Artist artist = mArtists.get(position);
 
-		if (artist == null) return;
-
 		holder.bind(artist, holder.itemView);
 
 		// click listener on entire row
@@ -82,8 +75,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 			@Override
 			public void onClick(View view) {
 				if (mCallback != null){
-					toggleArtistFavorited(artist, position);
-					toggleFavoritedInDB(view, artist);
+					toggleArtistFavorited(artist, position, view);
 					mCallback.onHeartClick(position, artist, mArtists);
 				}
 			}
@@ -94,28 +86,28 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 	private void artistDetailIntent(View view, Artist artist) {
 		Context context = view.getContext();
 		Intent intent = new Intent(context, ArtistActivity.class);
+
 		intent.putExtra(EXTRA_ARTIST_NAME, artist.getName());
+		intent.putExtra(EXTRA_ARTIST_FAVORITED, artist.isFavorited());
+
 		context.startActivity(intent);
 	}
 
-	protected void toggleArtistFavorited(Artist artist, int position) {
+	protected void toggleArtistFavorited(Artist artist, int position, View view) {
 		boolean favorited = artist.isFavorited();
 		artist.setFavorited(!favorited);
+		toggleFavoritedInDB(view, artist);
 		mArtists.set(position, artist);
 	}
 
 	private void toggleFavoritedInDB(View view, Artist artist) {
-		if( artist.isFavorited() == true && artist.getUuid() == null){
-			// add UUID to Pojo for out DB
+		if (artist.getUuid() == null ){ // our first interaction with this artist
 			artist.addUUID();
-			// add to DB
-			ArtistLab.get(view.getContext().getApplicationContext()).addArtist(artist);
+			ArtistLab.get(view.getContext()).addArtist(artist);
 		} else {
-			// already in DB, toggle favorited field
-			ArtistLab.get(view.getContext().getApplicationContext()).updateArtist(artist);
+			ArtistLab.get(view.getContext()).updateArtist(artist);
 		}
 	}
-
 	@Override
 	public int getItemCount() {
 		return mArtists.size();
@@ -127,12 +119,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 
 	public class ArtistHolder extends RecyclerView.ViewHolder  {
 		public static final String EXTRA_ARTIST_NAME = "artist_name";
+		public static final String EXTRA_ARTIST_FAVORITED = "artist_favorited";
+
 		private ImageView mArtistImage;
 		private TextView mArtistName;
 		private ImageView mFavoriteIcon;
 		private Artist mArtist;
-
-
 
 		public ArtistHolder(LayoutInflater inflater, ViewGroup parent) {
 			super(inflater.inflate(R.layout.list_item_artist, parent, false));
@@ -140,7 +132,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 			mArtistImage = (ImageView) itemView.findViewById(R.id.artist_image);
 			mArtistName = (TextView) itemView.findViewById(R.id.artist_name);
 			mFavoriteIcon = (ImageView) itemView.findViewById(R.id.favorite_icon);
-
 
 		}
 
