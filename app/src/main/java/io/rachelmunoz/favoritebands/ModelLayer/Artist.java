@@ -16,6 +16,10 @@ public class Artist {
 	@Expose
 	private String mName;
 
+	@SerializedName("id")
+	@Expose
+	private String mBITid;
+
 	@SerializedName("media_id")
 	@Expose
 	private String mMediaId;
@@ -45,6 +49,23 @@ public class Artist {
 //		mName = name;
 //	}
 
+	public Artist(){}
+
+//	public Artist(UUID uuid){
+//		mUuid = uuid;
+//		mName = " TEsting";
+//		mFavorited = true;
+//		mImageUrl = "https://vignette.wikia.nocookie.net/acourtofthornsandroses/images/a/a5/Cute_kitty.jpg/revision/latest/scale-to-width-down/540?cb=20170220162435";
+//	}
+
+
+	public String getBITid() {
+		return mBITid;
+	}
+
+	public void setBITid(String BITid) {
+		mBITid = BITid;
+	}
 
 	public void setUuid(UUID uuid) {
 		mUuid = uuid;

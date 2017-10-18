@@ -17,6 +17,7 @@ public class ArtistDbSchema {
 			public static final String IMAGE_URL = "imageUrl";
 			public static final String EVENT_COUNT = "eventCount";
 			public static final String TRACKER_COUNT = "trackerCount";
+			public static final String BIT_ID = "bandsintownid";
 		}
 	}
 }

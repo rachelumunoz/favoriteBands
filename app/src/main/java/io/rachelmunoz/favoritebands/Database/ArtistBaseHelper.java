@@ -23,6 +23,7 @@ public class ArtistBaseHelper extends SQLiteOpenHelper {
 		sqLiteDatabase.execSQL("create table " + ArtistDbTable.NAME + "(" +
 			" _id integer primary key autoincrement, " +
 				ArtistDbTable.Cols.UUID + ", " +
+				ArtistDbTable.Cols.BIT_ID + ", " +
 				ArtistDbTable.Cols.NAME + ", " +
 				ArtistDbTable.Cols.MEDIA_ID + ", " +
 				ArtistDbTable.Cols.FAVORITED + ", " +

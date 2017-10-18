@@ -86,6 +86,24 @@ public class ArtistLab {
 			cursor.close();
 		}
 	}
+
+	public Artist getArtistBitID(String id){
+
+		ArtistCursorWrapper cursor = queryArtists(
+				ArtistDbTable.Cols.BIT_ID + " = ?",
+				new String[] { id }
+		);
+
+		try {
+			if (cursor.getCount() == 0){
+				return null;
+			}
+			cursor.moveToFirst();
+			return cursor.getArtist();
+		} finally {
+			cursor.close();
+		}
+	}
 //
 //	whereClause = ImageThoughtTable.Cols.COMPLETE + " = ?";
 //	whereArgs =  new String[]{String.valueOf(1)};
@@ -108,6 +126,7 @@ public class ArtistLab {
 	private static ContentValues getContentValues(Artist artist){
 		ContentValues values = new ContentValues();
 		values.put(ArtistDbTable.Cols.UUID, artist.getUuid().toString());
+		values.put(ArtistDbTable.Cols.BIT_ID, artist.getBITid());
 		values.put(ArtistDbTable.Cols.NAME, artist.getName());
 		values.put(ArtistDbTable.Cols.MEDIA_ID, artist.getMediaId());
 		values.put(ArtistDbTable.Cols.FAVORITED, artist.isFavorited() ? Integer.toString(1) : Integer.toString(0));

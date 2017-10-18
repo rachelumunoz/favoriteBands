@@ -21,6 +21,7 @@ public class ArtistCursorWrapper extends CursorWrapper {
 
 	public Artist getArtist(){
 		String uuid           =      getString(getColumnIndex(ArtistDbTable.Cols.UUID));
+		String bitID          =      getString(getColumnIndex(ArtistDbTable.Cols.BIT_ID));
 		String name           =      getString(getColumnIndex(ArtistDbTable.Cols.NAME));
 		String mediaId        =      getString(getColumnIndex(ArtistDbTable.Cols.MEDIA_ID));
 		String imageUrl       =      getString(getColumnIndex(ArtistDbTable.Cols.IMAGE_URL));
@@ -30,6 +31,7 @@ public class ArtistCursorWrapper extends CursorWrapper {
 
 		Artist artist = new Artist();
 		artist.setUuid(UUID.fromString(uuid));
+		artist.setBITid(bitID);
 		artist.setName(name);
 		artist.setMediaId(mediaId);
 		artist.setImageUrl(imageUrl);
