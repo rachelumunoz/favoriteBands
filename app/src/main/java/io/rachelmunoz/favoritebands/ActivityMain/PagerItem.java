@@ -10,10 +10,9 @@ public class PagerItem {
 	private String mTitle;
 	private Fragment mFragment;
 
-
-	public PagerItem(String mTitle, Fragment mFragment) {
-		this.mTitle = mTitle;
-		this.mFragment = mFragment;
+	public PagerItem(String title, Fragment fragment) {
+		mTitle = title;
+		mFragment = fragment;
 	}
 	public String getTitle() {
 		return mTitle;
@@ -21,12 +20,11 @@ public class PagerItem {
 	public Fragment getFragment() {
 		return mFragment;
 	}
-	public void setTitle(String mTitle) {
-		this.mTitle = mTitle;
+	public void setTitle(String title) {
+		mTitle = title;
 	}
-
-	public void setFragment(Fragment mFragment) {
-		this.mFragment = mFragment;
+	public void setFragment(Fragment fragment) {
+		mFragment = fragment;
 	}
 
 }

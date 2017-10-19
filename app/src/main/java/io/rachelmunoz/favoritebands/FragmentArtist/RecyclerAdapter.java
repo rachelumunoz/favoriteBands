@@ -111,7 +111,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 	}
 
 	private void toggleFavoritedInDB(View view, Artist artist) {
-		if (artist.getUuid() == null ){ // our first interaction with this artist
+		if (artist.getUuid() == null ){ // our first interaction with this Artist
 			artist.addUUID();
 			ArtistLab.get(view.getContext()).addArtist(artist);
 		} else {
