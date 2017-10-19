@@ -7,9 +7,9 @@ android {
         applicationId "io.rachelmunoz.favoritebands"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        versionCode 2
     }
     buildTypes {
         release {
@@ -21,7 +21,8 @@ android {
         mavenCentral()
         maven { url 'https://maven.google.com' }
     }
-
+    productFlavors {
+    }
 }
 
 dependencies {
@@ -33,18 +34,13 @@ dependencies {
     compile 'com.android.support:design:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
-
     compile 'com.google.code.gson:gson:2.8.2'
-
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-
     compile 'io.reactivex:rxjava:1.1.6'
     compile 'io.reactivex:rxandroid:1.2.1'
-
     compile 'com.github.bumptech.glide:glide:4.2.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.2.0'
-
     testCompile 'junit:junit:4.12'
 }
