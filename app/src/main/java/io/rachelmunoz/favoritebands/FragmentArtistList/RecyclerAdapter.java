@@ -29,11 +29,10 @@ import static io.rachelmunoz.favoritebands.FragmentArtistList.RecyclerAdapter.Ar
  */
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ArtistHolder> {
-
 	private final String TAG = "RecyclerAdapter";
-	private Callback mCallback;
 
 	private List<Artist> mArtists;
+	private Callback mCallback;
 
 	public  interface Callback {
 		void onHeartClick(int position, List<Artist> artists);

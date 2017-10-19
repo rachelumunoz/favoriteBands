@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
  * Created by rachelmunoz on 10/17/17.
  */
 
+// This class is to help reset the Fragments on swipe of the pages in the ViewPager
 public class PagerItem {
 	private String mTitle;
 	private Fragment mFragment;

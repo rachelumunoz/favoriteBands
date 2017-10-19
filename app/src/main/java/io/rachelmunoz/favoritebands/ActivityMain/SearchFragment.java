@@ -66,7 +66,7 @@ public class SearchFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		// not in use at the moment because of bug with ViewPager swiping
-//		searchArtist(mCurrentQuery);
+		// searchArtist(mCurrentQuery);
 	}
 
 	@Nullable

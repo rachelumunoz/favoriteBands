@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
 			@Override
 			public void onPageSelected(int position) {
+				// Refreshes Fragments to display newest data
 				ArrayList<PagerItem> pagerItems = new ArrayList<>();
 
 				pagerItems.add(new PagerItem(getString(R.string.search_tab), new SearchFragment()));
@@ -51,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
 				mAdapter.setPagerItems(pagerItems);
 				mAdapter.notifyDataSetChanged();
-
 			}
 			@Override
 			public void onPageScrollStateChanged(int state) {

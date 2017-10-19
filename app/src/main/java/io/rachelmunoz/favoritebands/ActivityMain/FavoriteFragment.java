@@ -46,7 +46,6 @@ public class FavoriteFragment extends Fragment{
 		mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
 
 		updateUI();
-
 		return v;
 	}
 
