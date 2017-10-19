@@ -49,6 +49,7 @@ public class ArtistActivity extends AppCompatActivity {
 		mArtistNameFromIntent = getIntent().getStringExtra(RecyclerAdapter.ArtistHolder.EXTRA_ARTIST_NAME);
 		mArtistFavoritedFromIntent = getIntent().getBooleanExtra(RecyclerAdapter.ArtistHolder.EXTRA_ARTIST_FAVORITED, false);
 
+		// Artist to work with while we wait for network request
 		mArtist = new Artist();
 		mArtist.setFavorited(mArtistFavoritedFromIntent);
 		mArtist.setName(mArtistNameFromIntent);
@@ -59,10 +60,7 @@ public class ArtistActivity extends AppCompatActivity {
 		call.enqueue(new Callback<Artist>() {
 			@Override
 			public void onResponse(Call<Artist> call, Response<Artist> response) {
-
-
 				mArtist = response.body();
-
 				mArtist.setFavorited(mArtistFavoritedFromIntent);
 				updateUI();
 			}
@@ -80,7 +78,6 @@ public class ArtistActivity extends AppCompatActivity {
 				mArtist.setFavorited(!favorited);
 
 				setIcon(mArtist.isFavorited());
-
 				toggleFavoritedInDB(v.getContext(), mArtist);
 			}
 		});
@@ -113,8 +110,8 @@ public class ArtistActivity extends AppCompatActivity {
 
 	private void updateUI() {
 		mArtistNameTextView.setText(mArtist.getName());
-		mTrackerCountTextView.setText(String.valueOf(mArtist.getEventCount()));
-		mEventCountTextView.setText((String.valueOf(mArtist.getTrackerCount())));
+		mTrackerCountTextView.setText(String.valueOf(mArtist.getTrackerCount()));
+		mEventCountTextView.setText((String.valueOf(mArtist.getEventCount())));
 
 		setIcon(mArtist.isFavorited());
 
@@ -122,14 +119,5 @@ public class ArtistActivity extends AppCompatActivity {
 				.load(mArtist.getImageUrl())
 				.apply(RequestOptions.circleCropTransform())
 				.into(mArtistImageView);
-
-
-	}
-
-	@Override
-	protected void onPause() {
-//		mArtist = null;
-//		mArtistNameFromIntent = null;
-		super.onPause();
 	}
 }
