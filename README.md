@@ -13,6 +13,8 @@ This Android app allows users to search for their favorite artists against the B
 ### Architecture
 An MVC architectural pattern was used.
 
+[![mvc.png](https://s1.postimg.org/2rjkfzgw4f/mvc.png)](https://postimg.org/image/8vbcifjkij/)
+
 In the model layer, we have an Artist model with various fields that are populated from our Get request. And then a Singleton store called ArtistLab to interface between the Artist model and the controllers/ database.
 
 
