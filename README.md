@@ -55,10 +55,12 @@ There are also separate packages to group domain logic for the Database and API 
 * Compare search query against a User's favorited artists
     
     A feature that I think is important is to also compare a User's list of favorite artists against the query they make. So if a User has favorited the artist "Maroon 5", and then performs a search for "Maroon", if "Maroon 5" is a search result, it would be nice to reflect to the User that they have already favorited Maroon 5 and to reflect that in the UI with the favorited icon filled in 
+    
 * Enhanced UI/UX
      * While a user can search, favorite, and unfavorite artists. The User Experience can be more responsive. Adding loading progress bars and notifying a User when the search query yields no results would make for a better User Experience
      * Error handling. This app currently takes the happy path and assumes that the status of the Get requests is a status 200, I need to implement guard statements for responses that are not "Success"
- * Testing
+
+* Testing
  	
     Muy importante and this app has no tests
 
