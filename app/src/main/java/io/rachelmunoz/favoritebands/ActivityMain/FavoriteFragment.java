@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,7 @@ import java.util.List;
 import io.rachelmunoz.favoritebands.ModelLayer.Artist;
 import io.rachelmunoz.favoritebands.ModelLayer.ArtistLab;
 import io.rachelmunoz.favoritebands.R;
-import io.rachelmunoz.favoritebands.FragmentArtist.RecyclerAdapter;
+import io.rachelmunoz.favoritebands.FragmentArtistList.RecyclerAdapter;
 
 
 /**

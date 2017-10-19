@@ -1,4 +1,4 @@
-package io.rachelmunoz.favoritebands.FragmentArtist;
+package io.rachelmunoz.favoritebands.FragmentArtistList;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +12,7 @@ import io.rachelmunoz.favoritebands.R;
  * Created by rachelmunoz on 10/13/17.
  */
 
-public class ArtistFragment extends Fragment {
+public class ArtistListFragment extends Fragment {
 
 
 	@Override

@@ -1,4 +1,4 @@
-package io.rachelmunoz.favoritebands.FragmentArtist;
+package io.rachelmunoz.favoritebands.FragmentArtistList;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,8 +20,8 @@ import io.rachelmunoz.favoritebands.ActivityArtist.ArtistActivity;
 import io.rachelmunoz.favoritebands.ModelLayer.ArtistLab;
 import io.rachelmunoz.favoritebands.R;
 
-import static io.rachelmunoz.favoritebands.FragmentArtist.RecyclerAdapter.ArtistHolder.EXTRA_ARTIST_FAVORITED;
-import static io.rachelmunoz.favoritebands.FragmentArtist.RecyclerAdapter.ArtistHolder.EXTRA_ARTIST_NAME;
+import static io.rachelmunoz.favoritebands.FragmentArtistList.RecyclerAdapter.ArtistHolder.EXTRA_ARTIST_FAVORITED;
+import static io.rachelmunoz.favoritebands.FragmentArtistList.RecyclerAdapter.ArtistHolder.EXTRA_ARTIST_NAME;
 
 
 /**

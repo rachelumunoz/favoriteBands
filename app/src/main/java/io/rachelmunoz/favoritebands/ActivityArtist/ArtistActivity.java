@@ -15,7 +15,7 @@ import io.rachelmunoz.favoritebands.ModelLayer.ArtistLab;
 import io.rachelmunoz.favoritebands.R;
 import io.rachelmunoz.favoritebands.Api.ApiInterface;
 import io.rachelmunoz.favoritebands.Api.ArtistClient;
-import io.rachelmunoz.favoritebands.FragmentArtist.RecyclerAdapter;
+import io.rachelmunoz.favoritebands.FragmentArtistList.RecyclerAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

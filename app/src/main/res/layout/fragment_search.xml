@@ -39,7 +39,7 @@
 
 
         <fragment
-            android:name="io.rachelmunoz.favoritebands.FragmentArtist.ArtistFragment"
+            android:name="io.rachelmunoz.favoritebands.FragmentArtistList.ArtistListFragment"
             android:id="@+id/artist_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
