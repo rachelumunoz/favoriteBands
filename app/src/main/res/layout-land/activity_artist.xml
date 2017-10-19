@@ -13,12 +13,13 @@
         android:id="@+id/artist_image"
         android:layout_width="206dp"
         android:layout_height="144dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="28dp"
+        tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
-        tools:layout_constraintLeft_creator="1"/>
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="28dp"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/artist_name"
@@ -27,10 +28,12 @@
         android:text="Artist "
         android:textSize="30sp"
         android:layout_marginStart="45dp"
-        tools:layout_constraintTop_creator="1"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/artist_image"
-        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintVertical_bias="0.091"
+        android:layout_marginLeft="45dp"
         app:layout_constraintLeft_toLeftOf="@+id/artist_image"/>
 
     <TextView
@@ -39,21 +42,20 @@
         android:layout_height="wrap_content"
         android:text="@string/tracker_label"
         android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/event_label"
-        android:layout_marginStart="27dp"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toRightOf="@+id/event_count"
-        android:layout_marginLeft="27dp"/>
+        app:layout_constraintLeft_toLeftOf="@+id/artist_favorite_icon"
+        app:layout_constraintBaseline_toBaselineOf="@+id/event_label"/>
 
     <TextView
         android:id="@+id/tracker_count"
         android:layout_width="37dp"
-        android:layout_height="26dp"
+        android:layout_height="0dp"
         android:text="100"
-        android:layout_marginStart="23dp"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toRightOf="@+id/tracker_label"
-        android:layout_marginLeft="23dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tracker_label"/>
+        app:layout_constraintBaseline_toBaselineOf="@+id/tracker_label"
+        android:layout_marginLeft="-1dp"/>
 
     <TextView
         android:id="@+id/event_label"
@@ -61,36 +63,43 @@
         android:layout_height="wrap_content"
         android:text="@string/event_label"
         android:textSize="18sp"
-        android:layout_marginStart="171dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/artist_image"
         android:layout_marginTop="30dp"
         app:layout_constraintTop_toBottomOf="@+id/artist_name"
-        android:layout_marginLeft="171dp"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="8dp"
-        app:layout_constraintVertical_bias="0.0"/>
+        app:layout_constraintRight_toLeftOf="@+id/event_count"
+        android:layout_marginRight="8dp"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"/>
 
     <TextView
         android:id="@+id/event_count"
         android:layout_width="40dp"
         android:layout_height="24dp"
         android:text="15"
-        android:layout_marginStart="44dp"
-        android:layout_marginEnd="41dp"
+        android:layout_marginEnd="42dp"
         app:layout_constraintBaseline_toBaselineOf="@+id/event_label"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintRight_toRightOf="@+id/artist_name"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/artist_image"/>
+        android:layout_marginRight="42dp"
+        app:layout_constraintRight_toRightOf="@+id/artist_name"/>
 
     <ImageView
         android:id="@+id/artist_favorite_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/favorite_false"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintTop_toTopOf="@+id/artist_name"
-        app:layout_constraintLeft_toRightOf="@+id/artist_name"/>
+        app:layout_constraintLeft_toRightOf="@+id/artist_name"
+        android:layout_marginLeft="9dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/artist_image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintVertical_bias="0.131"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/artist_image"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginStart="9dp"
+        android:layout_marginEnd="8dp"/>
 
 </android.support.constraint.ConstraintLayout>
