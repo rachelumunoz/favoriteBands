@@ -2,9 +2,13 @@
 
 This Android app allows users to search for their favorite artists against the Bandsintown API. When a user clicks the heart icon next to an artist's name, this saves the artist to a list of favorited artists that is persisted to a database. A user can also click on an artist and navigate to a view that displays how many upcoming events that the artist has and the number of people that are tracking them.
 
+[![search.png](https://s1.postimg.org/6tp5mxq2a7/search.png)](https://postimg.org/image/9helxaj3m3/)
+[![favorites.png](https://s1.postimg.org/8eewmetp7z/favorites.png)](https://postimg.org/image/61ca57fw17/)
+[![artist_detail.png](https://s1.postimg.org/5u929rzb7z/artist_detail.png)](https://postimg.org/image/1wgot3oakr/)
+
 ### Technologies used:
 
-* Target SDK of 19 to accommodate around 80% of Android users. According to this [graph](https://developer.android.com/about/dashboards/index.html)
+* Target SDK of 19 to accommodate around 80% of Android users. According to this [chart](https://developer.android.com/about/dashboards/index.html)
 * Retrofit is used to handle the network calls. The decision to use Retrofit 2 was based on considering the best option for handling a network request off of the Main UI thread. Async Task was at first considered, but the ease of implementing Retrofit's API and parsing the JSON (GSON) data along with the readability and reusability made using Retrofit an easy decision.
     * When it came time to fetch the data to display both an artist's name along with their photo (hitting two different endpoints), the decision to use Observables and to compose two API calls was easily implemented as well using Retrofit 2.         
 * SQLite Database to persist data
