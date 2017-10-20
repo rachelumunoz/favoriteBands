@@ -8,7 +8,7 @@ This Android app allows users to search for their favorite artists against the B
 
 ### Technologies used:
 
-* Target SDK of 19 to accommodate around 80% of Android users. According to this [chart](https://developer.android.com/about/dashboards/index.html)
+* minimum SDK of 19 to accommodate around 80% of Android users. According to this [chart](https://developer.android.com/about/dashboards/index.html)
 * Retrofit is used to handle the network calls. The decision to use Retrofit 2 was based on considering the best option for handling a network request off of the Main UI thread. Async Task was at first considered, but the ease of implementing Retrofit's API and parsing the JSON (GSON) data along with the readability and reusability made using Retrofit an easy decision.
     * When it came time to fetch the data to display both an artist's name along with their photo (hitting two different endpoints), the decision to use Observables and to compose two API calls was easily implemented as well using Retrofit 2.         
 * SQLite Database to persist data
