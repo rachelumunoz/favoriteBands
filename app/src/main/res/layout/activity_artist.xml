@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,12 +14,20 @@
         android:layout_height="181dp"
         android:layout_marginTop="52dp"/>
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="29dp"/>
+
     <TextView
         android:id="@+id/artist_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Artist "
+        android:text="@string/default_artist_name"
         android:textSize="30sp"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="29dp"/>
 
     <LinearLayout
         android:id="@+id/counts_container"
@@ -41,10 +48,16 @@
                 android:text="@string/event_label"
                 android:textSize="18sp"/>
 
+            <Space
+                android:layout_width="5dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
             <TextView
                 android:id="@+id/event_count"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:text="@string/default_count"/>
         </LinearLayout>
 
         <Space
@@ -64,20 +77,27 @@
                 android:text="@string/tracker_label"
                 android:textSize="18sp"/>
 
+            <Space
+                android:layout_width="5dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
             <TextView
                 android:id="@+id/tracker_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="100"/>
+                android:text="@string/default_count"/>
         </LinearLayout>
 
     </LinearLayout>
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="29dp"/>
+
     <ImageView
         android:id="@+id/artist_favorite_icon"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/favorite_false"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>
