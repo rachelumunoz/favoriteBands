@@ -1,5 +1,7 @@
 package io.rachelmunoz.favoritebands.Database;
 
+import android.net.Uri;
+
 /**
  * Created by rachelmunoz on 10/13/17.
  */
@@ -8,6 +10,7 @@ public class ArtistDbSchema {
 
 	public static final class ArtistDbTable {
 		public static final String NAME = "artists";
+		public static final Uri URI = Uri.parse("content://user_dictionary/words");
 
 		public static final class Cols {
 			public static final String UUID = "uuid";

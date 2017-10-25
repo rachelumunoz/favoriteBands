@@ -24,6 +24,7 @@
         <activity android:name=".ActivityArtist.ArtistActivity"
             android:parentActivityName=".ActivityMain.MainActivity">
         </activity>
+        
     </application>
 
 </manifest>

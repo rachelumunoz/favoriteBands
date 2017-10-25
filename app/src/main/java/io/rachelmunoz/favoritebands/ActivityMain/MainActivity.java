@@ -1,5 +1,6 @@
 package io.rachelmunoz.favoritebands.ActivityMain;
 
+import android.nfc.Tag;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -27,55 +28,26 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		mViewPager = (ViewPager) findViewById(R.id.tab_fragment_container);
-		setupViewPager(mViewPager);
+		setupViewPage(mViewPager);
 
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 		tabLayout.setupWithViewPager(mViewPager);
 
-		mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
-			@Override
-			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-			}
-
-			@Override
-			public void onPageSelected(int position) {
-				// Refreshes Fragments to display newest data
-				ArrayList<PagerItem> pagerItems = new ArrayList<>();
-
-				pagerItems.add(new PagerItem(getString(R.string.search_tab), new SearchFragment()));
-				pagerItems.add(new PagerItem(getString(R.string.favorite_tab), new FavoriteFragment()));
-
-				mAdapter.setPagerItems(pagerItems);
-				mAdapter.notifyDataSetChanged();
-			}
-			@Override
-			public void onPageScrollStateChanged(int state) {
-
-			}
-		});
-
 	}
 
+	private void setupViewPage(ViewPager viewPager){
+		SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
 
-	private void setupViewPager(final ViewPager viewPager){
-		ArrayList<PagerItem> pagerItems = new ArrayList<>();
+		adapter.addFragment(new SearchFragment(), getString(R.string.search_tab));
+		adapter.addFragment(new FavoriteFragment(), getString(R.string.favorite_tab));
 
-		pagerItems.add(new PagerItem(getString(R.string.search_tab), new SearchFragment()));
-		pagerItems.add(new PagerItem(getString(R.string.favorite_tab), new FavoriteFragment()));
-
-		mAdapter = new SectionsPageAdapter(getSupportFragmentManager(), pagerItems);
-		mAdapter.setPagerItems(pagerItems);
-
-		viewPager.setAdapter(mAdapter);
-		mAdapter.notifyDataSetChanged();
+		viewPager.setAdapter(adapter);
 	}
-
-
 
 
 }

@@ -1,6 +1,8 @@
 package io.rachelmunoz.favoritebands.ActivityMain;
 
+import android.database.ContentObserver;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -12,6 +14,8 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import io.rachelmunoz.favoritebands.Database.ArtistDbSchema;
+import io.rachelmunoz.favoritebands.Database.ArtistDbSchema.ArtistDbTable;
 import io.rachelmunoz.favoritebands.ModelLayer.Artist;
 import io.rachelmunoz.favoritebands.ModelLayer.ArtistLab;
 import io.rachelmunoz.favoritebands.R;
@@ -28,6 +32,7 @@ public class FavoriteFragment extends Fragment{
 
 	private RecyclerView mRecyclerView;
 	private RecyclerAdapter mAdapter;
+	private ContentObserver mContentObserver;
 
 	@Override
 	public void onResume() {
@@ -45,8 +50,25 @@ public class FavoriteFragment extends Fragment{
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 		mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
 
+		mContentObserver = new ContentObserver(new Handler()) {
+			@Override
+			public void onChange(boolean selfChange) {
+				super.onChange(selfChange);
+				updateUI();
+			}
+		};
+
+		getActivity().getContentResolver().registerContentObserver(ArtistDbTable.URI, false, mContentObserver);
+
 		updateUI();
 		return v;
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+
+		getActivity().getContentResolver().unregisterContentObserver(mContentObserver);
 	}
 
 	private void updateUI(){

@@ -81,6 +81,8 @@ public class ArtistLab {
 		ContentValues values = getContentValues(artist);
 
 		mDatabase.insert(ArtistDbTable.NAME, null, values);
+
+		mContext.getContentResolver().notifyChange(ArtistDbTable.URI, null);
 	}
 
 	public void updateArtist(Artist artist){
@@ -91,6 +93,8 @@ public class ArtistLab {
 		mDatabase.update(ArtistDbTable.NAME, values,
 				ArtistDbTable.Cols.UUID + " = ?",
 				new String[]{uuidString});
+
+		mContext.getContentResolver().notifyChange(ArtistDbTable.URI, null);
 	}
 
 	public Artist getArtistByBitId(String bitId){
