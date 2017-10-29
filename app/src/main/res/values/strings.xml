@@ -7,7 +7,7 @@
     <string name="search_tab">Artists</string>
     <string name="favorite_tab">Favorites</string>
     <string name="event_label">Events: </string>
-    <string name="tracker_label">Followers: </string>
+    <string name="tracker_label">Trackers: </string>
     <string name="default_count">0</string>
     <string name="default_artist_name">Artist</string>
 </resources>
