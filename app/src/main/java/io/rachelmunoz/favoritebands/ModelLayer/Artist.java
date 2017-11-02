@@ -1,5 +1,8 @@
 package io.rachelmunoz.favoritebands.ModelLayer;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,7 +12,7 @@ import java.util.UUID;
  * Created by rachelmunoz on 10/12/17.
  */
 
-public class Artist {
+public class Artist implements Parcelable {
 	@SerializedName("name")
 	@Expose
 	private String mName;
@@ -106,5 +109,37 @@ public class Artist {
 
 	public void setFavorited(boolean favorited) {
 		mFavorited = favorited;
+	}
+
+
+	public Artist(Parcel in){
+
+		// the order needs to be the same as in writeToParcel() method
+		mName = in.readString();
+		mFavorited = in.readInt() == 1 ? true : false;
+		mImageUrl = in.readString();
+	}
+
+
+	public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+		public Artist createFromParcel(Parcel in) {
+			return new Artist(in);
+		}
+
+		public Artist[] newArray(int size) {
+			return new Artist[size];
+		}
+	};
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(mName);
+		dest.writeInt( mFavorited ? 1 : 0);
+		dest.writeString(mImageUrl);
 	}
 }
