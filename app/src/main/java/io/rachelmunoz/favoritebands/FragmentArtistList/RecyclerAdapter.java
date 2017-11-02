@@ -20,8 +20,8 @@ import io.rachelmunoz.favoritebands.ActivityArtist.ArtistActivity;
 import io.rachelmunoz.favoritebands.ModelLayer.ArtistLab;
 import io.rachelmunoz.favoritebands.R;
 
-import static io.rachelmunoz.favoritebands.FragmentArtistList.RecyclerAdapter.ArtistHolder.EXTRA_ARTIST_FAVORITED;
-import static io.rachelmunoz.favoritebands.FragmentArtistList.RecyclerAdapter.ArtistHolder.EXTRA_ARTIST_NAME;
+import static io.rachelmunoz.favoritebands.FragmentArtistList.RecyclerAdapter.ArtistHolder.EXTRA_ARTIST;
+import static io.rachelmunoz.favoritebands.FragmentArtistList.RecyclerAdapter.ArtistHolder.EXTRA_UUID;
 
 
 /**
@@ -29,6 +29,7 @@ import static io.rachelmunoz.favoritebands.FragmentArtistList.RecyclerAdapter.Ar
  */
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ArtistHolder> {
+
 	private final String TAG = "RecyclerAdapter";
 
 	private List<Artist> mArtists;
@@ -94,8 +95,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 		Context context = view.getContext();
 		Intent intent = new Intent(context, ArtistActivity.class);
 
-		intent.putExtra(EXTRA_ARTIST_NAME, artist.getName());
-		intent.putExtra(EXTRA_ARTIST_FAVORITED, artist.isFavorited());
+		intent.putExtra(EXTRA_ARTIST, artist);
+
+		if (artist.getUuid() != null){
+			intent.putExtra(EXTRA_UUID, artist.getUuid().toString());
+		}
 
 		context.startActivity(intent);
 	}
@@ -119,8 +123,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 	}
 
 	public class ArtistHolder extends RecyclerView.ViewHolder  {
-		public static final String EXTRA_ARTIST_NAME = "artist_name";
-		public static final String EXTRA_ARTIST_FAVORITED = "artist_favorited";
+		public static final String EXTRA_ARTIST = "artist";
+		public static final String EXTRA_UUID = "uuid";
 
 		private ImageView mArtistImage;
 		private TextView mArtistName;

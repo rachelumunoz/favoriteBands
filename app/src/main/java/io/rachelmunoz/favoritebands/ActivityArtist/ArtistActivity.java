@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.util.UUID;
+
 import io.rachelmunoz.favoritebands.ModelLayer.Artist;
 import io.rachelmunoz.favoritebands.ModelLayer.ArtistLab;
 import io.rachelmunoz.favoritebands.R;
@@ -46,13 +48,11 @@ public class ArtistActivity extends AppCompatActivity {
 		mTrackerCountTextView = (TextView) findViewById(R.id.tracker_count);
 		mFavoriteIcon = (ImageView) findViewById(R.id.artist_favorite_icon);
 
-		mArtistNameFromIntent = getIntent().getStringExtra(RecyclerAdapter.ArtistHolder.EXTRA_ARTIST_NAME);
-		mArtistFavoritedFromIntent = getIntent().getBooleanExtra(RecyclerAdapter.ArtistHolder.EXTRA_ARTIST_FAVORITED, false);
+		mArtist = (Artist) getIntent().getParcelableExtra(RecyclerAdapter.ArtistHolder.EXTRA_ARTIST);
 
-		// Artist to work with while we wait for network request
-		mArtist = new Artist();
-		mArtist.setFavorited(mArtistFavoritedFromIntent);
-		mArtist.setName(mArtistNameFromIntent);
+		if (getIntent().getStringExtra("uuid") != null){
+			mArtist.setUuid( UUID.fromString(getIntent().getStringExtra(RecyclerAdapter.ArtistHolder.EXTRA_UUID)));
+		}
 
 		mApiArtistInterface = ArtistClient.getApiClient().create(ApiInterface.class);
 
@@ -60,8 +60,11 @@ public class ArtistActivity extends AppCompatActivity {
 		call.enqueue(new Callback<Artist>() {
 			@Override
 			public void onResponse(Call<Artist> call, Response<Artist> response) {
-				mArtist = response.body();
-				mArtist.setFavorited(mArtistFavoritedFromIntent);
+				Artist responseArtist = response.body();
+
+				mArtist.setEventCount(responseArtist.getEventCount());
+				mArtist.setTrackerCount(responseArtist.getTrackerCount());
+
 				updateUI();
 			}
 

@@ -116,7 +116,7 @@ public class SearchFragment extends Fragment {
 						return mApiArtistInterface.getArtistDetails(artist.getName());
 					}
 				})
-				.subscribeOn(Schedulers.newThread())
+				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(new Subscriber<Artist>() {
 					@Override
