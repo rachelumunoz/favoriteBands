@@ -71,6 +71,4 @@
         android:layout_marginStart="10dp"
         android:text="@string/default_count"/>
 
-   
-
 </RelativeLayout>
