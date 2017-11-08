@@ -8,6 +8,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +24,11 @@ import io.rachelmunoz.favoritebands.FragmentArtistList.RecyclerAdapter;
 import io.rachelmunoz.favoritebands.ModelLayer.Artist;
 import io.rachelmunoz.favoritebands.R;
 import rx.Observable;
+import rx.Scheduler;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -44,6 +48,7 @@ public class SearchFragment extends Fragment {
 	private String mCurrentQuery;
 	private ApiInterface mApiArtistInterface;
 	private ApiInterface mApiSearchInterface;
+	private Subscription mSubscription;
 
 
 	@Override
@@ -57,7 +62,7 @@ public class SearchFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 
-		if (savedInstanceState != null){
+		if (savedInstanceState != null) {
 			mCurrentQuery = savedInstanceState.getString(KEY_QUERY);
 		}
 	}
@@ -66,6 +71,13 @@ public class SearchFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		searchArtist(mCurrentQuery);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		// where should unsubscribe
+		mSubscription.unsubscribe();
 	}
 
 	@Nullable
@@ -82,7 +94,7 @@ public class SearchFragment extends Fragment {
 		mApiSearchInterface = SearchClient.getApiClient().create(ApiInterface.class);
 		mApiArtistInterface = ArtistClient.getApiClient().create(ApiInterface.class);
 
-		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
 			public boolean onQueryTextSubmit(String query) {
 				mCurrentQuery = query;
@@ -102,43 +114,29 @@ public class SearchFragment extends Fragment {
 	}
 
 	private void searchArtist(String query) {
-
-		 mApiSearchInterface.getArtists(query)
-				.flatMap(new Func1<RequestResponse, Observable<Artist>>() {
-					@Override
-					public Observable<Artist> call(RequestResponse requestResponse) {
-						return Observable.from(requestResponse.getData());
-					}
-				})
-				.flatMap(new Func1<Artist, Observable<Artist>>() {
-					@Override
-					public Observable<Artist> call(Artist artist) {
-						return mApiArtistInterface.getArtistDetails(artist.getName());
-					}
-				})
-				.subscribeOn(Schedulers.io())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(new Subscriber<Artist>() {
-					@Override
-					public void onCompleted() {
-
-					}
-
-					@Override
-					public void onError(Throwable e) {
-
-					}
-
-					@Override
-					public void onNext(Artist artist) {
-						mArtists.add(artist);
-						updateUI();
-					}
-				});
+		mSubscription =
+				mApiSearchInterface.getArtists(query) // RequestResponse
+						.subscribeOn(Schedulers.io())
+						.flatMap(res -> Observable.from(res.getData()))
+						.flatMap(artist -> mApiArtistInterface.getArtistDetails(artist.getName()))
+						.observeOn(AndroidSchedulers.mainThread())
+						.subscribe(
+								//onNext
+								(artist -> {
+									Log.d(TAG, artist.getName() + " " + artist.getBitId());
+									mArtists.add(artist);
+									updateUI();
+								}),
+								// onError
+								t -> {},
+								// onCompleted
+								() -> Log.d(TAG, " completed")
+						);
 	}
 
-	private void updateUI(){
-		if (mRecyclerAdapter == null){
+
+	private void updateUI() {
+		if (mRecyclerAdapter == null) {
 			setupAdapter();
 		} else {
 			mRecyclerAdapter.setArtists(mArtists);
@@ -146,8 +144,8 @@ public class SearchFragment extends Fragment {
 		}
 	}
 
-	private void refreshFragment(){
-		if (mRecyclerAdapter == null){
+	private void refreshFragment() {
+		if (mRecyclerAdapter == null) {
 			setupAdapter();
 		} else {
 			// use diff util?
