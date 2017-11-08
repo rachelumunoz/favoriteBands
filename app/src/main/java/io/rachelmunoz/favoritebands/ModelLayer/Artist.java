@@ -118,6 +118,7 @@ public class Artist implements Parcelable {
 		mName = in.readString();
 		mFavorited = in.readInt() == 1 ? true : false;
 		mImageUrl = in.readString();
+		mBitId = in.readString();
 	}
 
 
@@ -141,5 +142,6 @@ public class Artist implements Parcelable {
 		dest.writeString(mName);
 		dest.writeInt( mFavorited ? 1 : 0);
 		dest.writeString(mImageUrl);
+		dest.writeString(mBitId != null ? mBitId : null);
 	}
 }

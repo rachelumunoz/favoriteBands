@@ -91,10 +91,7 @@ public class ArtistActivity extends AppCompatActivity {
 
 	private void setIcon(boolean isFavorited) {
 		if (isFavorited) {
-			Glide.with(this)
-					.load(this.getResources().getDrawable(R.drawable.favorite_true)) // drawable loading from the placeholder
-					.apply(new RequestOptions().placeholder(this.getResources().getDrawable(R.drawable.favorite_true)))
-					.into(mFavoriteIcon);
+			mFavoriteIcon.setImageDrawable(this.getResources().getDrawable(R.drawable.favorite_true));
 		} else {
 			mFavoriteIcon.setImageDrawable(this.getResources().getDrawable(R.drawable.favorite_false));
 		}
