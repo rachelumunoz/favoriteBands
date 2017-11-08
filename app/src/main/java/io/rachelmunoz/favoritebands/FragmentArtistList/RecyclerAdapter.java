@@ -156,10 +156,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Artist
 
 		private void setFavoritedIcon(Artist artist, View v) {
 			if (artist.isFavorited()){
-				Glide.with(v)
-						.load(v.getResources().getDrawable(R.drawable.favorite_true)) // drawable loading from the placeholder
-						.apply(new RequestOptions().placeholder(v.getResources().getDrawable(R.drawable.favorite_true)))
-						.into(mFavoriteIcon);
+				mFavoriteIcon.setImageDrawable(v.getResources().getDrawable(R.drawable.favorite_true));
 			} else {
 				mFavoriteIcon.setImageDrawable(v.getResources().getDrawable(R.drawable.favorite_false));
 			}
